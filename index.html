@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="PixelPlay Store: tienda chilena de videojuegos para PlayStation 5.">
+    <title>PixelPlay Store | Tienda de videojuegos</title>
+
+    <!-- Hoja de estilos externa (Semana 2) -->
+    <link rel="stylesheet" href="css/Diego_Carvajal_PFY2201_CSS_Semana2.css">
+</head>
+
+<body>
+
+    <!-- Encabezado del sitio -->
+    <header id="inicio" class="cabecera">
+        <div class="contenedor cabecera__interior">
+
+            <img class="cabecera__logo" src="img/logo-pixelplay-mono.svg"
+                 alt="Logotipo de PixelPlay Store" width="292" height="88">
+
+            <h1 class="cabecera__titulo">PixelPlay Store</h1>
+
+            <p class="cabecera__bajada">
+                Tienda chilena especializada en videojuegos para PlayStation 5.
+                Precios justos, garantía oficial y despacho a todo el país.
+            </p>
+
+            <!-- Menú de navegación -->
+            <nav class="menu" aria-label="Menú principal">
+                <ul class="menu__lista">
+                    <li><a class="menu__enlace" href="#inicio">Inicio</a></li>
+                    <li><a class="menu__enlace" href="#productos">Productos</a></li>
+                    <li><a class="menu__enlace" href="#categorias">Categorías</a></li>
+                    <li><a class="menu__enlace" href="#contacto">Contacto</a></li>
+                </ul>
+            </nav>
+
+        </div>
+    </header>
+
+    <main>
+
+        <!-- Sección principal: productos en venta -->
+        <section id="productos" class="seccion">
+            <div class="contenedor">
+
+                <h2 class="seccion__titulo">Productos destacados</h2>
+
+                <p class="seccion__intro">Estos son los títulos más vendidos de la semana en nuestra tienda.</p>
+
+                <ul class="productos">
+
+                    <li class="producto">
+                        <img class="producto__imagen" src="img/juego-spider-man-2.jpg"
+                             alt="Portada del videojuego Marvel's Spider-Man 2" width="240" height="240">
+                        <h3 class="producto__nombre">Marvel's Spider-Man 2</h3>
+                        <p class="producto__descripcion">
+                            Acción y aventura. Peter Parker y Miles Morales se enfrentan a Venom en Nueva York.
+                            Desarrollado por Insomniac Games.
+                        </p>
+                        <p class="producto__precio">$59.990</p>
+                        <a class="boton" href="#contacto" aria-label="Consultar por Marvel's Spider-Man 2">Consultar</a>
+                    </li>
+
+                    <li class="producto">
+                        <img class="producto__imagen" src="img/juego-god-of-war-ragnarok.jpg"
+                             alt="Portada del videojuego God of War Ragnarök" width="240" height="240">
+                        <h3 class="producto__nombre">God of War Ragnarök</h3>
+                        <p class="producto__descripcion">
+                            Acción y aventura. Kratos y Atreus recorren los nueve reinos ante la llegada del Ragnarök.
+                            Desarrollado por Santa Monica Studio.
+                        </p>
+                        <p class="producto__precio">$44.990</p>
+                        <a class="boton" href="#contacto" aria-label="Consultar por God of War Ragnarök">Consultar</a>
+                    </li>
+
+                    <li class="producto">
+                        <img class="producto__imagen" src="img/juego-ghost-of-yotei.jpg"
+                             alt="Portada del videojuego Ghost of Yotei" width="240" height="240">
+                        <h3 class="producto__nombre">Ghost of Yōtei</h3>
+                        <p class="producto__descripcion">
+                            Mundo abierto ambientado en el Japón de 1603, en las tierras del monte Yōtei.
+                            Desarrollado por Sucker Punch Productions.
+                        </p>
+                        <p class="producto__precio">$69.990</p>
+                        <a class="boton" href="#contacto" aria-label="Consultar por Ghost of Yōtei">Consultar</a>
+                    </li>
+
+                    <li class="producto">
+                        <img class="producto__imagen" src="img/juego-gran-turismo-7.jpg"
+                             alt="Portada del videojuego Gran Turismo 7" width="240" height="240">
+                        <h3 class="producto__nombre">Gran Turismo 7</h3>
+                        <p class="producto__descripcion">
+                            Simulador de carreras con más de 400 vehículos y circuitos reales.
+                            Desarrollado por Polyphony Digital.
+                        </p>
+                        <p class="producto__precio">$49.990</p>
+                        <a class="boton" href="#contacto" aria-label="Consultar por Gran Turismo 7">Consultar</a>
+                    </li>
+
+                    <li class="producto">
+                        <img class="producto__imagen" src="img/juego-astro-bot.jpg"
+                             alt="Portada del videojuego Astro Bot" width="240" height="240">
+                        <h3 class="producto__nombre">Astro Bot</h3>
+                        <p class="producto__descripcion">
+                            Plataformas en 3D con más de 80 niveles y homenajes a la historia de PlayStation.
+                            Desarrollado por Team Asobi.
+                        </p>
+                        <p class="producto__precio">$54.990</p>
+                        <a class="boton" href="#contacto" aria-label="Consultar por Astro Bot">Consultar</a>
+                    </li>
+
+                    <li class="producto">
+                        <img class="producto__imagen" src="img/juego-horizon-forbidden-west.jpg"
+                             alt="Portada del videojuego Horizon Forbidden West" width="240" height="240">
+                        <h3 class="producto__nombre">Horizon Forbidden West</h3>
+                        <p class="producto__descripcion">
+                            Acción y rol en mundo abierto. Aloy explora el oeste prohibido enfrentando máquinas.
+                            Desarrollado por Guerrilla Games.
+                        </p>
+                        <p class="producto__precio">$39.990</p>
+                        <a class="boton" href="#contacto" aria-label="Consultar por Horizon Forbidden West">Consultar</a>
+                    </li>
+
+                </ul>
+            </div>
+        </section>
+
+        <!-- Categorías del catálogo -->
+        <section id="categorias" class="seccion seccion--alterna">
+            <div class="contenedor">
+
+                <h2 class="seccion__titulo">Categorías</h2>
+
+                <p class="seccion__intro">Nuestro catálogo está organizado en las siguientes categorías:</p>
+
+                <ol class="categorias">
+                    <li>Acción y aventura</li>
+                    <li>Rol (RPG)</li>
+                    <li>Carreras y simulación</li>
+                    <li>Plataformas</li>
+                    <li>Consolas y accesorios</li>
+                </ol>
+
+            </div>
+        </section>
+
+        <!-- Contacto: datos de la tienda y formulario -->
+        <section id="contacto" class="seccion">
+            <div class="contenedor">
+
+                <h2 class="seccion__titulo">Contacto</h2>
+
+                <div class="contacto__datos">
+                    <p>
+                        PixelPlay Store — Avenida Providencia 1234, local 15, Santiago de Chile.<br>
+                        Teléfono: +56 2 2345 6789 — Correo:
+                        <a href="mailto:contacto@pixelplay.cl">contacto@pixelplay.cl</a>
+                    </p>
+                </div>
+
+                <!-- Formulario de contacto -->
+                <form class="formulario" action="#contacto" method="post">
+
+                    <p class="formulario__nota">
+                        Los campos marcados con <span class="campo__marca">*</span> son obligatorios.
+                    </p>
+
+                    <fieldset class="formulario__grupo">
+                        <legend class="formulario__leyenda">Tus datos</legend>
+
+                        <p class="campo">
+                            <label class="campo__etiqueta" for="nombre">Nombre completo
+                                   <span class="campo__marca" aria-hidden="true">*</span></label>
+                            <input class="campo__control" type="text" id="nombre" name="nombre"
+                                   placeholder="Ej: Diego Carvajal" required>
+                        </p>
+
+                        <p class="campo">
+                            <label class="campo__etiqueta" for="correo">Correo electrónico
+                                   <span class="campo__marca" aria-hidden="true">*</span></label>
+                            <input class="campo__control" type="email" id="correo" name="correo"
+                                   placeholder="tucorreo@ejemplo.cl" required>
+                        </p>
+
+                        <p class="campo">
+                            <label class="campo__etiqueta" for="telefono">Teléfono</label>
+                            <input class="campo__control" type="tel" id="telefono" name="telefono"
+                                   placeholder="+56 9 1234 5678">
+                        </p>
+                    </fieldset>
+
+                    <fieldset class="formulario__grupo">
+                        <legend class="formulario__leyenda">Tu consulta</legend>
+
+                        <p class="campo">
+                            <label class="campo__etiqueta" for="juego">Juego de interés</label>
+                            <input class="campo__control" type="text" id="juego" name="juego"
+                                   list="catalogo" placeholder="Escribe o elige un título">
+                            <datalist id="catalogo">
+                                <option value="Marvel's Spider-Man 2"></option>
+                                <option value="God of War Ragnarök"></option>
+                                <option value="Ghost of Yōtei"></option>
+                                <option value="Gran Turismo 7"></option>
+                                <option value="Astro Bot"></option>
+                                <option value="Horizon Forbidden West"></option>
+                            </datalist>
+                        </p>
+
+                        <p class="campo">
+                            <label class="campo__etiqueta" for="motivo">Motivo del contacto</label>
+                            <select class="campo__control" id="motivo" name="motivo">
+                                <option value="disponibilidad">Consultar disponibilidad</option>
+                                <option value="despacho">Despacho a regiones</option>
+                                <option value="garantia">Garantía y postventa</option>
+                                <option value="otro">Otro</option>
+                            </select>
+                        </p>
+
+                        <fieldset class="formulario__opciones">
+                            <legend class="formulario__leyenda formulario__leyenda--menor">Forma de entrega</legend>
+
+                            <p class="opcion">
+                                <input type="radio" id="retiro" name="entrega" value="retiro" checked>
+                                <label for="retiro">Retiro en tienda</label>
+                            </p>
+
+                            <p class="opcion">
+                                <input type="radio" id="despacho" name="entrega" value="despacho">
+                                <label for="despacho">Despacho a domicilio</label>
+                            </p>
+                        </fieldset>
+
+                        <p class="campo campo--ancho">
+                            <label class="campo__etiqueta" for="mensaje">Mensaje
+                                   <span class="campo__marca" aria-hidden="true">*</span></label>
+                            <textarea class="campo__control" id="mensaje" name="mensaje" rows="5"
+                                      placeholder="Cuéntanos en qué te podemos ayudar" required></textarea>
+                        </p>
+
+                        <p class="opcion">
+                            <input type="checkbox" id="novedades" name="novedades" value="si">
+                            <label for="novedades">Quiero recibir novedades y ofertas por correo</label>
+                        </p>
+                    </fieldset>
+
+                    <p class="formulario__acciones">
+                        <button class="boton boton--principal" type="submit">Enviar consulta</button>
+                        <button class="boton boton--secundario" type="reset">Limpiar</button>
+                    </p>
+
+                </form>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Pie de página -->
+    <footer class="pie">
+        <div class="contenedor">
+
+            <h3 class="pie__titulo">Síguenos</h3>
+
+            <ul class="redes">
+                <li><a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer">Instagram</a></li>
+                <li><a href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer">YouTube</a></li>
+                <li><a href="https://www.twitch.tv/" target="_blank" rel="noopener noreferrer">Twitch</a></li>
+            </ul>
+
+            <p class="pie__copyright">Copyright &copy; 2026 PixelPlay Store.</p>
+
+        </div>
+    </footer>
+
+</body>
+
+</html>
