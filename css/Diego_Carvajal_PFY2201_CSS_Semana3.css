@@ -3,28 +3,32 @@
 /* =============================================================================
    PixelPlay Store — Hoja de estilos principal
    Asignatura : Desarrollo Frontend I (PFY2201)
-   Actividad  : Exp 1 · Semana 2 — "Optimizando la página web con CSS"
+   Actividad  : Exp 1 · Semana 3 — Actividad sumativa
+                "Optimizando un sitio web con HTML, CSS y diseño responsivo"
    Autor      : Diego Carvajal
 
-   Criterio de diseño: sobriedad. Una sola familia tipográfica, una paleta de
-   cinco tonos neutros más un único color de acento, y ningún efecto decorativo
-   (sin degradados, sombras ni brillos). El color lo aportan las portadas de
-   los juegos; la hoja solo ordena el espacio.
+   Reparto de responsabilidades entre los dos sistemas de layout:
+     · CSS Grid  → estructura de la página (cabecera, filtros, contenido, pie),
+                   la cuadrícula de productos y el formulario en dos columnas.
+                   Es bidimensional: ordena filas y columnas a la vez.
+     · Flexbox   → todo lo que es una sola fila o una sola columna: el menú de
+                   navegación, el pie, las categorías, el interior de cada
+                   tarjeta y la fila de botones. Es unidimensional.
 
    Contenido de la hoja:
      1. Tipografía externa
      2. Variables globales (:root)
      3. Reset y modelo de cajas (box-sizing)
      4. Estilos base: colores y tipografía
-     5. Contenedor y utilidades de layout
+     5. Estructura de la página con CSS Grid
      6. Cabecera
-     7. Menú de navegación
-     8. Secciones
-     9. Productos
-    10. Botones
-    11. Categorías
+     7. Menú de navegación (Flexbox)
+     8. Barra lateral de filtros (Flexbox)
+     9. Secciones del contenido
+    10. Cuadrícula de productos (Grid) y tarjeta (Flexbox)
+    11. Botones
     12. Contacto y formulario
-    13. Pie de página
+    13. Pie de página (Flexbox)
     14. Selectores avanzados adicionales
     15. Diseño responsivo (media queries)
    ========================================================================== */
@@ -46,7 +50,7 @@
 :root {
     /* --- Paleta: cinco neutros y un solo acento --- */
     --color-fondo:       #ffffff;   /* fondo general                        */
-    --color-alterno:     #f7f7f8;   /* fondo de secciones y filas alternas  */
+    --color-alterno:     #f7f7f8;   /* fondo de bloques y filas alternas    */
     --color-borde:       #e4e4e7;   /* líneas de 1px                        */
     --color-suave:       #52525b;   /* texto secundario                     */
     --color-texto:       #18181b;   /* texto principal                      */
@@ -146,8 +150,30 @@ img {
 
 
 /* =============================================================================
-   5. CONTENEDOR Y UTILIDADES DE LAYOUT
+   5. ESTRUCTURA DE LA PÁGINA CON CSS GRID
+   El <body> es la cuadrícula principal. Se nombran cuatro áreas y cada región
+   del documento se coloca en la suya con grid-area, sin importar el orden del
+   HTML. En móvil son cuatro filas apiladas; en escritorio (punto 15) pasan a
+   dos columnas con la barra lateral junto al contenido.
    ========================================================================== */
+body {
+    display: grid;
+    grid-template-columns: 1fr;   /* móvil: una sola columna */
+    grid-template-areas:
+        "cabecera"
+        "filtros"
+        "contenido"
+        "pie";
+    min-height: 100vh;
+    align-content: start;   /* las filas no se estiran para llenar la pantalla */
+}
+
+.cabecera  { grid-area: cabecera; }
+.filtros   { grid-area: filtros; }
+.contenido { grid-area: contenido; }
+.pie       { grid-area: pie; }
+
+/* Caja centrada de ancho máximo, para la cabecera y el pie */
 .contenedor {
     width: 100%;
     max-width: 1080px;
@@ -155,16 +181,23 @@ img {
     padding-inline: var(--espacio-md);    /* relleno lateral                   */
 }
 
+/* En móvil, filtros y contenido llevan su propio relleno lateral. En
+   escritorio lo aportan las columnas laterales de la cuadrícula (punto 15) */
+.filtros,
+.contenido {
+    padding-inline: var(--espacio-md);
+}
+
 
 /* =============================================================================
    6. CABECERA
    ========================================================================== */
 .cabecera {
-    background-color: var(--color-fondo);
     border-bottom: var(--borde-fino);
     padding-block: var(--espacio-lg);
 }
 
+/* Flexbox en columna: logotipo, título, bajada y menú, uno bajo otro */
 .cabecera__interior {
     display: flex;
     flex-direction: column;
@@ -196,7 +229,9 @@ img {
 
 
 /* =============================================================================
-   7. MENÚ DE NAVEGACIÓN
+   7. MENÚ DE NAVEGACIÓN (Flexbox)
+   El enunciado pide Flexbox para las barras horizontales: los enlaces se
+   reparten en una fila que se envuelve sola cuando no caben.
    ========================================================================== */
 .menu {
     margin-top: var(--espacio-xs);
@@ -205,9 +240,9 @@ img {
 
 .menu__lista {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: wrap;                      /* si no caben, saltan de línea */
     gap: var(--espacio-xs) var(--espacio-md);
-    list-style: none;    /* se quitan las viñetas de la lista */
+    list-style: none;                     /* se quitan las viñetas */
 }
 
 .menu__enlace {
@@ -241,16 +276,74 @@ img {
 
 
 /* =============================================================================
-   8. SECCIONES
+   8. BARRA LATERAL DE FILTROS (Flexbox)
+   Las categorías cambian de forma según el espacio: en móvil son etiquetas
+   que fluyen en una fila envolvente; en escritorio, una columna vertical.
+   El mismo HTML, solo cambia flex-direction en la media query del punto 15.
    ========================================================================== */
-.seccion {
+.filtros {
     padding-block: var(--espacio-lg);
 }
 
-/* Clase modificadora: fondo alterno para diferenciar secciones contiguas */
-.seccion--alterna {
+.filtros__titulo {
+    margin-bottom: var(--espacio-sm);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.categorias {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--espacio-xs);
+    list-style: none;
+    margin-bottom: var(--espacio-lg);
+}
+
+.categoria {
+    display: inline-block;
+    padding: 0.375rem var(--espacio-sm);
+    border: var(--borde-fino);
+    border-radius: 999px;
+    color: var(--color-suave);
+    font-size: 0.8125rem;
+    transition: border-color var(--transicion),
+                color var(--transicion);
+}
+
+.categoria:hover {
+    border-color: var(--color-texto);
+    color: var(--color-texto);
+    text-decoration: none;
+}
+
+.filtros__lista {
+    list-style: none;
+    font-size: 0.8125rem;
+}
+
+.filtros__lista li {
+    padding: var(--espacio-xs);
+    color: var(--color-suave);
+}
+
+/* Pseudo-elemento ::before — antepone un guion a cada dato de envío */
+.filtros__lista li::before {
+    content: "— ";
+}
+
+/* Pseudo-clase :nth-child(odd) — filas alternas apenas sombreadas */
+.filtros__lista li:nth-child(odd) {
     background-color: var(--color-alterno);
-    border-block: var(--borde-fino);
+}
+
+
+/* =============================================================================
+   9. SECCIONES DEL CONTENIDO
+   ========================================================================== */
+.seccion {
+    padding-block: var(--espacio-lg);
 }
 
 .seccion__titulo {
@@ -259,9 +352,7 @@ img {
     border-bottom: var(--borde-fino);
 }
 
-/* Selector de adyacencia inmediata (+): el párrafo que sigue al título.
-   Se descartó resaltar su primera línea con ::first-line porque el punto de
-   corte depende del ancho de pantalla y en el teléfono parecía un error */
+/* Selector de adyacencia inmediata (+): el párrafo que sigue al título */
 .seccion__titulo + .seccion__intro {
     margin-block: var(--espacio-sm) var(--espacio-lg);
     max-width: 62ch;
@@ -271,9 +362,11 @@ img {
 
 
 /* =============================================================================
-   9. PRODUCTOS
-   La cuadrícula parte en una sola columna (móvil) y crece a 2 y 3 columnas
-   en las media queries del punto 15.
+   10. CUADRÍCULA DE PRODUCTOS (Grid) Y TARJETA (Flexbox)
+   La lista es una cuadrícula que pasa de una a dos y a tres columnas.
+   Cada tarjeta, por dentro, es una columna flexible: la descripción crece
+   para que el precio y el botón queden siempre al pie, alineados entre
+   tarjetas aunque los textos tengan distinto largo.
    ========================================================================== */
 .productos {
     display: grid;
@@ -286,8 +379,8 @@ img {
 .producto {
     display: flex;
     flex-direction: column;
+    height: 100%;
     padding: var(--espacio-md);
-    background-color: var(--color-fondo);
     border: var(--borde-fino);
     border-radius: var(--radio);
     transition: border-color var(--transicion);
@@ -295,11 +388,6 @@ img {
 
 .producto:hover {
     border-color: var(--color-texto);
-}
-
-.producto__nombre {
-    margin-top: var(--espacio-md);
-    font-size: 1rem;
 }
 
 .producto__imagen {
@@ -310,14 +398,30 @@ img {
     border-radius: var(--radio);
 }
 
+.producto__nombre {
+    margin-top: var(--espacio-md);
+    font-size: 1rem;
+}
+
 .producto__descripcion {
-    flex-grow: 1;   /* empuja el precio y el botón al pie de la tarjeta */
+    flex-grow: 1;   /* absorbe el espacio sobrante y empuja el pie hacia abajo */
     margin-top: var(--espacio-xs);
     font-size: 0.875rem;
 }
 
+/* Pie de la tarjeta: precio y botón en una fila, a los extremos */
+.producto__pie {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--espacio-xs);
+    margin-top: var(--espacio-md);
+    padding-top: var(--espacio-sm);
+    border-top: var(--borde-fino);
+}
+
 .producto__precio {
-    margin-block: var(--espacio-md) var(--espacio-sm);
     color: var(--color-texto);
     font-size: 1.0625rem;
     font-weight: 600;
@@ -326,11 +430,11 @@ img {
 
 
 /* =============================================================================
-   10. BOTONES
+   11. BOTONES
    ========================================================================== */
 .boton {
     display: inline-block;
-    padding: 0.625rem var(--espacio-md);
+    padding: 0.5rem var(--espacio-md);
     border: 1px solid var(--color-texto);
     border-radius: var(--radio);
     background-color: transparent;
@@ -379,47 +483,6 @@ img {
 
 
 /* =============================================================================
-   11. CATEGORÍAS
-   Se reemplaza la numeración por defecto de la lista <ol> por un contador
-   propio, generado con el pseudo-elemento ::before.
-   ========================================================================== */
-.categorias {
-    counter-reset: contador-categorias;   /* inicia el contador en 0 */
-    list-style: none;
-    max-width: 34rem;
-    border-block: var(--borde-fino);   /* la lista queda enmarcada arriba y abajo */
-}
-
-.categorias li {
-    counter-increment: contador-categorias;   /* suma 1 por cada <li> */
-    display: flex;
-    gap: var(--espacio-md);
-    padding: var(--espacio-sm) var(--espacio-xs);
-}
-
-/* Pseudo-elemento ::before — antepone el número en el tono secundario */
-.categorias li::before {
-    content: counter(contador-categorias, decimal-leading-zero);
-    color: var(--color-suave);
-    font-size: 0.8125rem;
-    font-variant-numeric: tabular-nums;
-    line-height: 1.9;
-}
-
-/* Pseudo-clase :nth-child(odd) — filas alternas en blanco sobre el fondo gris
-   de la sección, para facilitar la lectura de la lista */
-.categorias li:nth-child(odd) {
-    background-color: var(--color-fondo);
-}
-
-/* Selector de hermanos generales (~) — la línea divisoria se dibuja solo
-   entre elementos: ninguna sobre el primero ni bajo el último */
-.categorias li:first-child ~ li {
-    border-top: var(--borde-fino);
-}
-
-
-/* =============================================================================
    12. CONTACTO Y FORMULARIO
    ========================================================================== */
 .contacto__datos {
@@ -430,7 +493,7 @@ img {
 }
 
 /* El relleno se mantiene igual en todos los anchos: como la caja tiene un
-   máximo de 720px, cualquier aumento posterior le quitaría ancho a los campos */
+   máximo, cualquier aumento posterior le quitaría ancho a los campos */
 .formulario {
     max-width: 720px;
     padding: var(--espacio-md);
@@ -584,16 +647,28 @@ select.campo__control {
 
 
 /* =============================================================================
-   13. PIE DE PÁGINA
+   13. PIE DE PÁGINA (Flexbox)
+   Tres bloques que se reparten el ancho en una fila y se apilan solos en
+   pantallas angostas gracias a flex-wrap, sin necesidad de media query.
    ========================================================================== */
 .pie {
     border-top: var(--borde-fino);
     padding-block: var(--espacio-lg);
 }
 
+.pie__interior {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--espacio-lg);
+}
+
+.pie__bloque {
+    flex: 1 1 200px;   /* crece, se encoge, y nunca baja de 200px */
+    font-size: 0.875rem;
+}
+
 .pie__titulo {
-    margin-bottom: var(--espacio-sm);
-    color: var(--color-suave);
+    margin-bottom: var(--espacio-xs);
     font-size: 0.75rem;
     font-weight: 600;
     letter-spacing: 0.08em;
@@ -602,18 +677,17 @@ select.campo__control {
 
 .redes {
     display: flex;
-    flex-wrap: wrap;
-    gap: var(--espacio-md);
+    flex-direction: column;
+    gap: var(--espacio-xs);
     list-style: none;
-    margin-bottom: var(--espacio-lg);
-}
-
-/* Selector hijo directo (>) — solo los <li> hijos de la lista de redes */
-.redes > li {
-    font-size: 0.9rem;
 }
 
 .pie__copyright {
+    max-width: 1080px;
+    margin: var(--espacio-lg) auto 0;
+    padding-top: var(--espacio-sm);
+    padding-inline: var(--espacio-md);
+    border-top: var(--borde-fino);
     color: var(--color-suave);
     font-size: 0.8125rem;
 }
@@ -631,7 +705,7 @@ a[href^="https"]::after {
     font-size: 0.8em;
 }
 
-/* Selector de agrupación — la lista de redes y el pie comparten tamaño */
+/* Selector de agrupación — mismo interlineado en los textos pequeños del pie */
 .redes > li,
 .pie__copyright {
     line-height: 1.5;
@@ -646,9 +720,10 @@ a[href^="https"]::after {
 
 /* =============================================================================
    15. DISEÑO RESPONSIVO (media queries)
-   La hoja está escrita con enfoque "mobile first": los estilos base sirven
-   para pantallas pequeñas y todas las media queries usan min-width, de modo
-   que solo agregan ajustes a medida que la pantalla crece.
+   Enfoque "mobile first": los estilos base son los del teléfono y todas las
+   media queries usan min-width, de modo que solo agregan ajustes a medida
+   que la pantalla crece. Puntos de quiebre en 600px (tablet) y 900px
+   (escritorio), los dos momentos en que el diseño realmente necesita cambiar.
    ========================================================================== */
 
 /* --- Tabletas: desde 600px --- */
@@ -667,7 +742,7 @@ a[href^="https"]::after {
         grid-template-columns: repeat(2, 1fr);
     }
 
-    /* Los botones del formulario vuelven a una sola fila, alineados a la derecha */
+    /* Los botones del formulario vuelven a una sola fila, a la derecha */
     .formulario__acciones {
         flex-direction: row;
         justify-content: flex-end;
@@ -678,8 +753,41 @@ a[href^="https"]::after {
 /* --- Escritorio: desde 900px --- */
 @media (min-width: 900px) {
 
+    /* La cuadrícula de la página pasa a dos columnas de contenido, con dos
+       columnas laterales de 1fr que centran el conjunto. La cabecera y el
+       pie siguen ocupando el ancho completo. */
+    body {
+        grid-template-columns: 1fr minmax(200px, 240px) minmax(0, 780px) 1fr;
+        grid-template-areas:
+            "cabecera cabecera cabecera  cabecera"
+            ".        filtros  contenido ."
+            "pie      pie      pie       pie";
+        column-gap: var(--espacio-lg);
+    }
+
+    /* El relleno lateral ya lo aportan las columnas de la cuadrícula */
+    .filtros,
+    .contenido {
+        padding-inline: 0;
+    }
+
     .cabecera {
         padding-block: var(--espacio-xl);
+    }
+
+    /* La barra lateral acompaña al contenido y se queda a la vista al
+       desplazarse, que es lo esperable en un filtro de catálogo */
+    .filtros {
+        position: sticky;
+        top: var(--espacio-md);
+        align-self: start;
+        padding-block: var(--espacio-xl);
+    }
+
+    /* Las categorías pasan de etiquetas en fila a una columna vertical */
+    .categorias {
+        flex-direction: column;
+        align-items: flex-start;
     }
 
     /* Tres tarjetas de producto por fila */
@@ -687,7 +795,7 @@ a[href^="https"]::after {
         grid-template-columns: repeat(3, 1fr);
     }
 
-    /* El formulario pasa a dos columnas en pantallas anchas */
+    /* El formulario pasa a dos columnas */
     .formulario__grupo {
         display: grid;
         grid-template-columns: 1fr 1fr;

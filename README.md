@@ -1,9 +1,11 @@
-# PixelPlay Store — Semana 2
+# PixelPlay Store — Semana 3
 
-Actividad **«Optimizando la página web con CSS»** de la asignatura
-**Desarrollo Frontend I (PFY2201)**, Duoc UC. Exp 1 — Semana 2.
+Actividad **sumativa** «Optimizando un sitio web con HTML, CSS y diseño responsivo»
+de la asignatura **Desarrollo Frontend I (PFY2201)**, Duoc UC. Exp 1 — Semana 3.
 
-Página principal de una tienda chilena de videojuegos para PlayStation 5.
+Sitio de una tienda chilena de videojuegos para PlayStation 5, estructurado con
+HTML5 semántico y maquetado con **CSS Grid** y **Flexbox**.
+
 El proyecto avanza semana a semana: cada commit de este repositorio corresponde
 a la entrega de una semana del ramo.
 
@@ -17,63 +19,63 @@ a la entrega de una semana del ramo.
 tienda-videojuegos-pfy2201/
 ├── index.html                                  Página principal
 ├── css/
-│   └── Diego_Carvajal_PFY2201_CSS_Semana2.css  Hoja de estilos externa
-├── img/
-│   ├── logo-pixelplay-mono.svg                 Logotipo monocromo (en uso)
-│   ├── logo-pixelplay.svg                      Logotipo original a color
-│   └── juego-*.jpg                             6 portadas de videojuegos
+│   └── Diego_Carvajal_PFY2201_CSS_Semana3.css  Hoja de estilos externa
+├── img/                                        Logotipo y 6 portadas
+├── capturas/                                   Evidencias en 3 dispositivos
+│   ├── 01-escritorio-1440px.png                y comparativa entre navegadores
+│   ├── 02-tablet-820px.png
+│   ├── 03-movil-390px.png
+│   └── 04-navegadores-firefox-vs-chrome-*.png
 └── README.md
 ```
 
-## De dónde viene y qué se agregó
+## Reparto entre Grid y Flexbox
 
-### Semana 1 — Creando una estructura básica en HTML
+El enunciado pide Flexbox para las barras horizontales y Grid para las secciones
+principales. Cada sistema se usa donde le corresponde:
 
-Estructura de la página con HTML5 semántico, sin CSS ni JavaScript.
+| | Dónde | Por qué |
+|---|---|---|
+| **CSS Grid** | Estructura de la página (`body`) | Es bidimensional: coloca cabecera, filtros, contenido y pie en filas y columnas a la vez, con `grid-template-areas` |
+| | Cuadrícula de productos | Las tarjetas ocupan filas y columnas: 1 → 2 → 3 según el ancho |
+| | Formulario en escritorio | Dos columnas de campos, con los anchos declarados una sola vez |
+| **Flexbox** | Menú de navegación | Una sola fila que se envuelve sola cuando no cabe |
+| | Pie de página | Tres bloques que se reparten el ancho y se apilan con `flex-wrap`, sin media query |
+| | Barra lateral de categorías | Mismo HTML: etiquetas en fila envolvente en móvil, columna en escritorio |
+| | Interior de cada tarjeta | Columna con `flex-grow` en la descripción, para que precio y botón queden siempre al pie |
+| | Fila de botones del formulario | Columna en móvil, fila alineada a la derecha desde 600 px |
 
-- Etiquetas semánticas: `<header>`, `<nav>`, `<main>`, `<section>`, `<footer>`
-- Jerarquía de encabezados: un `<h1>` único, `<h2>` por sección y `<h3>` por producto
-- Listas `<ul>` y `<ol>`, enlaces internos, externos y `mailto:`
-- Imágenes con `alt`, `width` y `height`
+## Puntos de quiebre
 
-### Semana 2 — Optimizando la página web con CSS
+| Ancho | Estructura de página | Productos | Categorías |
+|---|---|---|---|
+| < 600 px | 1 columna | 1 por fila | Etiquetas en fila envolvente |
+| 600 – 899 px | 1 columna | 2 por fila | Etiquetas en fila envolvente |
+| ≥ 900 px | 2 columnas (filtros + contenido) | 3 por fila | Columna vertical |
 
-Optimización visual mediante una hoja de estilos **externa**, más un formulario
-de contacto que aplica los contenidos de formularios de la semana.
+Enfoque **mobile first**: los estilos base son los del teléfono y todas las media
+queries usan `min-width`, de modo que solo agregan ajustes al crecer la pantalla.
 
-- **Hoja externa** enlazada con `<link>` dentro del `<head>`
-- **Modelo de cajas**: `box-sizing: border-box`, `padding`, `margin` y `border`
-- **Variables CSS** en `:root` para colores, tipografía y escala de espaciado
-- **Selectores**: etiqueta, clase, ID, descendente, hijo (`>`), adyacente (`+`),
-  hermanos generales (`~`), de atributo (`[type=…]`, `[href^=…]`), pseudo-clases
-  (`:hover`, `:focus`, `:active`, `:required`, `:nth-child()`, `:first-child`,
-  `:last-of-type`) y pseudo-elementos (`::before`, `::after`, `::placeholder`,
-  `::selection`)
-- **Diseño responsivo** mobile first: la grilla de productos pasa de 1 a 2 y a 3
-  columnas en los puntos de quiebre de 600 px y 900 px
-
-### Criterio de diseño
+## Criterio de diseño
 
 Sobriedad: la interfaz no compite con las portadas de los juegos.
 
-- **Una sola familia tipográfica** (`Inter`, pesos 400/500/600) con familias de
-  respaldo. La jerarquía se construye con tamaño y peso, no sumando tipografías.
-- **Cinco tonos neutros y un solo acento**: blanco `#ffffff`, gris de fondo
-  `#f7f7f8`, línea `#e4e4e7`, texto secundario `#52525b`, texto `#18181b` y el
-  índigo `#2d1b69` del logotipo, reservado para enlaces, foco y campos obligatorios.
-- **Sin efectos decorativos**: ni degradados, ni sombras, ni brillos. La estructura
-  se define con espacio en blanco y líneas de un píxel.
-- `img/logo-pixelplay-mono.svg` es la versión monocroma del logotipo, usada en la
-  cabecera; el original a color se conserva en `img/logo-pixelplay.svg`.
+- **Una sola familia tipográfica** (`Inter`, pesos 400/500/600) con familias de respaldo.
+- **Cinco tonos neutros y un solo acento**: `#ffffff`, `#f7f7f8`, `#e4e4e7`, `#52525b`,
+  `#18181b` y el índigo `#2d1b69` del logotipo, reservado a enlaces, foco y campos
+  obligatorios.
+- **Sin efectos decorativos**: ni degradados, ni sombras, ni brillos. La estructura se
+  define con espacio en blanco y líneas de un píxel.
 
-## Validación
+## Verificación
 
-| Herramienta | Resultado |
+| Comprobación | Resultado |
 |---|---|
 | [W3C Nu HTML Checker](https://validator.w3.org/nu/) | 0 errores, 0 advertencias |
 | [W3C CSS Validator](https://jigsaw.w3.org/css-validator/) (CSS 3) | Válido, 0 errores |
+| Anchos probados sin desborde horizontal | 320 a 1680 px (19 anchos) |
+| Chrome 151 (Blink) vs Firefox 146 (Gecko) | Sin diferencias de maquetación en 390, 820 y 1440 px |
 | Contraste WCAG 2.1 nivel AA | Cumple en todas las combinaciones de texto y fondo |
-| Anchos probados sin desborde horizontal | 320, 360, 390, 480, 600, 768, 820 y 1440 px |
 
 ## Cómo verlo localmente
 
@@ -83,11 +85,22 @@ cd tienda-videojuegos-pfy2201
 open index.html
 ```
 
-En Visual Studio Code también puede abrirse con la extensión **Live Server**.
+## Historial del proyecto
 
-## Tecnologías
+Un commit por semana. Para ver el sitio tal como se entregó en una semana
+concreta, basta con situarse en su commit:
 
-HTML5 · CSS3 (variables, Flexbox, Grid y media queries) · Google Fonts (Inter)
+| Semana | Entrega | Qué se agregó |
+|---|---|---|
+| 1 | Creando una estructura básica en HTML | HTML5 semántico: encabezados, párrafos, listas, enlaces e imágenes. Sin CSS |
+| 2 | Optimizando la página web con CSS | Hoja externa, modelo de cajas, variables, paleta y tipografía, selectores avanzados y formulario de contacto |
+| 3 | Optimizando un sitio web con HTML, CSS y diseño responsivo | Maquetación con CSS Grid y Flexbox, barra lateral de filtros, tarjetas como `<article>` y verificación entre navegadores |
+
+```bash
+git log --oneline          # ver los tres commits
+git checkout <hash>        # situarse en la entrega de esa semana
+git checkout main          # volver al estado actual
+```
 
 ## Autor
 
