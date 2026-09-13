@@ -1,0 +1,150 @@
+@charset "UTF-8";
+
+/* =============================================================================
+   PixelPlay Store — Ajustes sobre Bootstrap 5.3.8
+   Asignatura : Desarrollo Frontend I (PFY2201)
+   Actividad  : Exp 2 · Semana 4 — "Utilizando Bootstrap 5 para el diseño responsivo"
+   Autor      : Diego Carvajal
+
+   Esta hoja no reemplaza a Bootstrap ni reconstruye nada que Bootstrap ya
+   resuelva (cuadrícula, barra de navegación, carrusel, tarjetas, formularios).
+   Solo ajusta su apariencia para mantener la línea sobria del sitio: una sola
+   tipografía, tonos neutros y un único color de acento.
+
+   La mayor parte se logra redefiniendo las variables CSS que Bootstrap 5.3
+   expone. Además hay unas pocas reglas propias: la marca de la sección activa
+   del menú y, donde Bootstrap usa valores fijos sin variable que redefinir, el
+   foco del teclado (menú, flechas del carrusel y formularios), las casillas
+   marcadas y el ancho de las flechas del carrusel.
+
+   Contenido:
+     1. Variables globales de Bootstrap
+     2. Barra de navegación
+     3. Carrusel de destacados
+     4. Formularios
+   ========================================================================== */
+
+
+/* =============================================================================
+   1. VARIABLES GLOBALES DE BOOTSTRAP
+   Bootstrap las declara en :root. Esta hoja se carga después, así que con la
+   misma especificidad sus valores prevalecen. Los colores que Bootstrap también
+   lee en formato -rgb se declaran en las dos variantes: según el componente usa
+   una u otra, y si solo se cambia una, parte de la página conserva el color
+   original.
+   ========================================================================== */
+:root {
+    /* --- Acento propio: el índigo del logotipo --- */
+    --pp-acento:     #2d1b69;
+    --pp-acento-rgb: 45, 27, 105;
+
+    /* --- Tipografía --- */
+    --bs-body-font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+
+    /* --- Textos y superficies: grises neutros en vez de los azulados de Bootstrap --- */
+    --bs-body-color:         #18181b;
+    --bs-body-color-rgb:     24, 24, 27;
+    --bs-emphasis-color:     #18181b;
+    --bs-emphasis-color-rgb: 24, 24, 27;
+    --bs-secondary-color:    #52525b;
+    --bs-border-color:       #e4e4e7;
+    --bs-tertiary-bg:        #f7f7f8;
+    --bs-tertiary-bg-rgb:    247, 247, 248;   /* la que usa .bg-body-tertiary del pie */
+
+    /* --- Enlaces: el acento en lugar del azul por defecto --- */
+    --bs-link-color:           var(--pp-acento);
+    --bs-link-color-rgb:       var(--pp-acento-rgb);
+    --bs-link-hover-color:     #18181b;
+    --bs-link-hover-color-rgb: 24, 24, 27;
+
+    /* --- Esquinas casi rectas --- */
+    --bs-border-radius:    0.125rem;
+    --bs-border-radius-sm: 0.125rem;
+    --bs-border-radius-lg: 0.25rem;
+
+}
+
+
+/* =============================================================================
+   2. BARRA DE NAVEGACIÓN
+   ========================================================================== */
+.navbar-nav {
+    --bs-nav-link-font-weight: 500;
+}
+
+/* Foco del teclado en los enlaces del menú. Bootstrap lo dibuja con un anillo
+   azul fijo (box-shadow), sin variable que redefinir: se repite con el acento. */
+.navbar .nav-link:focus-visible {
+    box-shadow: 0 0 0 0.25rem rgba(var(--pp-acento-rgb), 0.5);
+}
+
+/* En escritorio la sección activa se marca con una línea del color de acento.
+   En móvil el menú se despliega a lo ancho y esa línea cruzaría la pantalla
+   completa, así que solo se aplica desde lg (992 px), igual que navbar-expand-lg. */
+@media (min-width: 992px) {
+    .navbar .nav-link.active {
+        box-shadow: inset 0 -2px 0 var(--pp-acento);
+    }
+
+    /* La línea también es un box-shadow y pesa más que la regla de foco: en el
+       enlace activo con foco se dibujan las dos, o el foco quedaría invisible. */
+    .navbar .nav-link.active:focus-visible {
+        box-shadow: inset 0 -2px 0 var(--pp-acento), 0 0 0 0.25rem rgba(var(--pp-acento-rgb), 0.5);
+    }
+}
+
+
+/* =============================================================================
+   3. CARRUSEL DE DESTACADOS
+   ========================================================================== */
+
+/* Las diapositivas son claras, así que las flechas y los indicadores blancos que
+   trae Bootstrap no se verían. Las flechas se oscurecen con el mismo filtro de su
+   variante oscura (.carousel-dark) y los indicadores se pintan con el color del
+   texto. No se usa data-bs-theme="dark" porque también pasaría a modo oscuro los
+   textos secundarios de las diapositivas. */
+.destacados .carousel {
+    --bs-carousel-indicator-active-bg: #18181b;
+    --bs-carousel-control-icon-filter: invert(1) grayscale(100);
+}
+
+/* Bootstrap reserva el 15 % del ancho para cada control, lo que taparía la
+   portada y el texto. Con 3rem caben justo en el relleno lateral (px-5) que
+   deja cada diapositiva. */
+.destacados .carousel-control-prev,
+.destacados .carousel-control-next {
+    width: 3rem;
+}
+
+/* Foco del teclado en las flechas. Bootstrap les quita el contorno y solo sube
+   su opacidad, un cambio casi imperceptible: se dibuja un contorno alrededor del
+   ícono. Se declara en blanco porque el filtro invert(1) del control lo muestra
+   negro. */
+.destacados .carousel-control-prev:focus-visible,
+.destacados .carousel-control-next:focus-visible {
+    opacity: 1;
+}
+
+.destacados .carousel-control-prev:focus-visible .carousel-control-prev-icon,
+.destacados .carousel-control-next:focus-visible .carousel-control-next-icon {
+    outline: 2px solid #fff;
+    outline-offset: 0.25rem;
+}
+
+
+/* =============================================================================
+   4. FORMULARIOS
+   Bootstrap pinta el foco y las casillas marcadas con un azul fijo, sin
+   variable que redefinir: se sobrescriben con el acento del sitio.
+   ========================================================================== */
+.form-control:focus,
+.form-select:focus,
+.form-check-input:focus {
+    border-color: var(--pp-acento);
+    box-shadow: 0 0 0 0.25rem rgba(var(--pp-acento-rgb), 0.2);
+}
+
+.form-check-input:checked {
+    background-color: var(--pp-acento);
+    border-color: var(--pp-acento);
+}

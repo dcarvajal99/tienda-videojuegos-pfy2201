@@ -3,317 +3,628 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="PixelPlay Store: tienda chilena de videojuegos para PlayStation 5.">
     <title>PixelPlay Store | Tienda de videojuegos</title>
 
-    <!-- Hoja de estilos externa -->
-    <link rel="stylesheet" href="css/Diego_Carvajal_PFY2201_CSS_Semana3.css">
+    <!-- Bootstrap 5.3.8 desde la CDN de jsDelivr. El atributo integrity (SRI)
+         hace que el navegador rechace el archivo si alguien lo alterara. -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+          integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+          crossorigin="anonymous">
+
+    <!-- Tipografía Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;display=swap">
+
+    <!-- Hoja propia: ajusta variables de Bootstrap y agrega unas pocas reglas
+         (foco, menú activo y carrusel). Va después de bootstrap.min.css para
+         que, a igual especificidad, sus valores prevalezcan. -->
+    <link rel="stylesheet" href="css/Diego_Carvajal_PFY2201_CSS_Semana4.css">
 </head>
 
 <body>
 
-    <!-- Cabecera del sitio -->
-    <header id="inicio" class="cabecera">
-        <div class="contenedor cabecera__interior">
+    <!-- Enlace para saltar al contenido: invisible hasta que recibe el foco
+         del teclado, para no obligar a recorrer todo el menú -->
+    <a class="visually-hidden-focusable position-absolute top-0 start-0 m-2 px-3 py-2 bg-dark text-white z-3"
+       href="#contenido">Saltar al contenido principal</a>
 
-            <img class="cabecera__logo" src="img/logo-pixelplay-mono.svg"
-                 alt="Logotipo de PixelPlay Store" width="292" height="88">
+    <!-- =====================================================================
+         CABECERA Y BARRA DE NAVEGACIÓN (componente navbar)
+         navbar-expand-lg: el menú se muestra completo desde 992 px; por
+         debajo se colapsa detrás del botón hamburguesa.
+         ================================================================== -->
+    <header>
+        <nav class="navbar navbar-expand-lg bg-body border-bottom" aria-label="Menú principal">
+            <div class="container">
 
-            <h1 class="cabecera__titulo">PixelPlay Store</h1>
+                <a class="navbar-brand" href="#inicio">
+                    <img class="d-block" src="img/logo-pixelplay-mono.svg"
+                         alt="PixelPlay Store" width="146" height="44">
+                </a>
 
-            <p class="cabecera__bajada">
-                Tienda chilena especializada en videojuegos para PlayStation 5.
-                Precios justos, garantía oficial y despacho a todo el país.
-            </p>
+                <!-- Botón hamburguesa: abre y cierra el menú en pantallas pequeñas -->
+                <button class="navbar-toggler" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#menuPrincipal"
+                        aria-controls="menuPrincipal" aria-expanded="false"
+                        aria-label="Abrir o cerrar el menú">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-            <!-- Menú de navegación: fila con Flexbox -->
-            <nav class="menu" aria-label="Menú principal">
-                <ul class="menu__lista">
-                    <li><a class="menu__enlace" href="#inicio">Inicio</a></li>
-                    <li><a class="menu__enlace" href="#productos">Productos</a></li>
-                    <li><a class="menu__enlace" href="#categorias">Categorías</a></li>
-                    <li><a class="menu__enlace" href="#contacto">Contacto</a></li>
-                </ul>
-            </nav>
+                <div class="collapse navbar-collapse" id="menuPrincipal">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="#inicio">Inicio</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#destacados">Destacados</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#catalogo">Catálogo</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#contacto">Contacto</a></li>
+                    </ul>
+                </div>
 
-        </div>
+            </div>
+        </nav>
     </header>
 
-    <!-- Barra lateral de filtros: complementaria al contenido principal -->
-    <aside id="categorias" class="filtros" aria-label="Filtros del catálogo">
+    <main id="contenido">
 
-        <h2 class="filtros__titulo">Categorías</h2>
-
-        <ol class="categorias">
-            <li><a class="categoria" href="#productos">Acción y aventura</a></li>
-            <li><a class="categoria" href="#productos">Rol (RPG)</a></li>
-            <li><a class="categoria" href="#productos">Carreras y simulación</a></li>
-            <li><a class="categoria" href="#productos">Plataformas</a></li>
-            <li><a class="categoria" href="#productos">Consolas y accesorios</a></li>
-        </ol>
-
-        <h2 class="filtros__titulo">Envío</h2>
-
-        <ul class="filtros__lista">
-            <li>Retiro en tienda sin costo</li>
-            <li>Despacho a todo Chile</li>
-            <li>Garantía oficial de 12 meses</li>
-        </ul>
-
-    </aside>
-
-    <!-- Contenido principal -->
-    <main class="contenido">
-
-        <!-- Catálogo de productos -->
-        <section id="productos" class="seccion">
-
-            <h2 class="seccion__titulo">Productos destacados</h2>
-
-            <p class="seccion__intro">Estos son los títulos más vendidos de la semana en nuestra tienda.</p>
-
-            <ul class="productos">
-
-                <li>
-                    <article class="producto">
-                        <img class="producto__imagen" src="img/juego-spider-man-2.jpg"
-                             alt="Portada del videojuego Marvel's Spider-Man 2" width="240" height="240">
-                        <h3 class="producto__nombre">Marvel's Spider-Man 2</h3>
-                        <p class="producto__descripcion">
-                            Acción y aventura. Peter Parker y Miles Morales se enfrentan a Venom en Nueva York.
-                            Desarrollado por Insomniac Games.
+        <!-- =================================================================
+             PRESENTACIÓN
+             ============================================================== -->
+        <section id="inicio" class="py-5 border-bottom">
+            <div class="container">
+                <div class="row">
+                    <!-- En pantallas grandes el texto ocupa 8 de las 12 columnas,
+                         para que las líneas no se estiren de lado a lado -->
+                    <div class="col-lg-8">
+                        <p class="small text-uppercase fw-semibold text-body-secondary mb-2">
+                            Videojuegos para PlayStation 5
                         </p>
-                        <footer class="producto__pie">
-                            <p class="producto__precio">$59.990</p>
-                            <a class="boton" href="#contacto"
-                               aria-label="Consultar por Marvel's Spider-Man 2">Consultar</a>
-                        </footer>
-                    </article>
-                </li>
-
-                <li>
-                    <article class="producto">
-                        <img class="producto__imagen" src="img/juego-god-of-war-ragnarok.jpg"
-                             alt="Portada del videojuego God of War Ragnarök" width="240" height="240">
-                        <h3 class="producto__nombre">God of War Ragnarök</h3>
-                        <p class="producto__descripcion">
-                            Acción y aventura. Kratos y Atreus recorren los nueve reinos ante la llegada del Ragnarök.
-                            Desarrollado por Santa Monica Studio.
+                        <h1 class="display-5 fw-semibold mb-3">PixelPlay Store</h1>
+                        <p class="lead text-body-secondary mb-4">
+                            Tienda chilena especializada en videojuegos para PlayStation 5.
+                            Precios justos, garantía oficial y despacho a todo el país.
                         </p>
-                        <footer class="producto__pie">
-                            <p class="producto__precio">$44.990</p>
-                            <a class="boton" href="#contacto"
-                               aria-label="Consultar por God of War Ragnarök">Consultar</a>
-                        </footer>
-                    </article>
-                </li>
-
-                <li>
-                    <article class="producto">
-                        <img class="producto__imagen" src="img/juego-ghost-of-yotei.jpg"
-                             alt="Portada del videojuego Ghost of Yotei" width="240" height="240">
-                        <h3 class="producto__nombre">Ghost of Yōtei</h3>
-                        <p class="producto__descripcion">
-                            Mundo abierto ambientado en el Japón de 1603, en las tierras del monte Yōtei.
-                            Desarrollado por Sucker Punch Productions.
-                        </p>
-                        <footer class="producto__pie">
-                            <p class="producto__precio">$69.990</p>
-                            <a class="boton" href="#contacto"
-                               aria-label="Consultar por Ghost of Yotei">Consultar</a>
-                        </footer>
-                    </article>
-                </li>
-
-                <li>
-                    <article class="producto">
-                        <img class="producto__imagen" src="img/juego-gran-turismo-7.jpg"
-                             alt="Portada del videojuego Gran Turismo 7" width="240" height="240">
-                        <h3 class="producto__nombre">Gran Turismo 7</h3>
-                        <p class="producto__descripcion">
-                            Simulador de carreras con más de 400 vehículos y circuitos reales.
-                            Desarrollado por Polyphony Digital.
-                        </p>
-                        <footer class="producto__pie">
-                            <p class="producto__precio">$49.990</p>
-                            <a class="boton" href="#contacto"
-                               aria-label="Consultar por Gran Turismo 7">Consultar</a>
-                        </footer>
-                    </article>
-                </li>
-
-                <li>
-                    <article class="producto">
-                        <img class="producto__imagen" src="img/juego-astro-bot.jpg"
-                             alt="Portada del videojuego Astro Bot" width="240" height="240">
-                        <h3 class="producto__nombre">Astro Bot</h3>
-                        <p class="producto__descripcion">
-                            Plataformas en 3D con más de 80 niveles y homenajes a la historia de PlayStation.
-                            Desarrollado por Team Asobi.
-                        </p>
-                        <footer class="producto__pie">
-                            <p class="producto__precio">$54.990</p>
-                            <a class="boton" href="#contacto"
-                               aria-label="Consultar por Astro Bot">Consultar</a>
-                        </footer>
-                    </article>
-                </li>
-
-                <li>
-                    <article class="producto">
-                        <img class="producto__imagen" src="img/juego-horizon-forbidden-west.jpg"
-                             alt="Portada del videojuego Horizon Forbidden West" width="240" height="240">
-                        <h3 class="producto__nombre">Horizon Forbidden West</h3>
-                        <p class="producto__descripcion">
-                            Acción y rol en mundo abierto. Aloy explora el oeste prohibido enfrentando máquinas.
-                            Desarrollado por Guerrilla Games.
-                        </p>
-                        <footer class="producto__pie">
-                            <p class="producto__precio">$39.990</p>
-                            <a class="boton" href="#contacto"
-                               aria-label="Consultar por Horizon Forbidden West">Consultar</a>
-                        </footer>
-                    </article>
-                </li>
-
-            </ul>
+                        <div class="d-flex flex-wrap gap-2">
+                            <a class="btn btn-dark" href="#catalogo">Ver catálogo</a>
+                            <a class="btn btn-outline-dark" href="#contacto">Contactar</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </section>
 
-        <!-- Contacto: datos de la tienda y formulario -->
-        <section id="contacto" class="seccion">
+        <!-- =================================================================
+             DESTACADOS (componente carousel)
+             data-bs-ride="carousel": arranque automático al cargar la página.
+             data-bs-interval="3000" en cada diapositiva: cambia cada 3 s.
+             El script del final recrea el carrusel cambiando esa opción: false para
+             detenerlo (botón Pausar y foco del teclado) y 'carousel' para reanudarlo.
+             ============================================================== -->
+        <section id="destacados" class="destacados py-5 border-bottom" aria-labelledby="titulo-destacados">
+            <div class="container">
 
-            <h2 class="seccion__titulo">Contacto</h2>
+                <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-4">
+                    <h2 id="titulo-destacados" class="h3 mb-0">Destacados de la semana</h2>
+                    <!-- Oculto hasta que el script lo activa: sin JavaScript no serviría -->
+                    <button id="botonPausa" class="btn btn-outline-dark btn-sm" type="button"
+                            aria-controls="carruselDestacados" hidden>Pausar</button>
+                </div>
 
-            <div class="contacto__datos">
-                <p>
-                    PixelPlay Store — Avenida Providencia 1234, local 15, Santiago de Chile.<br>
-                    Teléfono: +56 2 2345 6789 — Correo:
-                    <a href="mailto:contacto@pixelplay.cl">contacto@pixelplay.cl</a>
-                </p>
+                <div id="carruselDestacados" class="carousel slide border rounded" data-bs-ride="carousel">
+
+                    <!-- Indicadores: un botón por diapositiva -->
+                    <div class="carousel-indicators">
+                        <button type="button" data-bs-target="#carruselDestacados" data-bs-slide-to="0"
+                                class="active" aria-current="true" aria-label="Diapositiva 1"></button>
+                        <button type="button" data-bs-target="#carruselDestacados" data-bs-slide-to="1"
+                                aria-label="Diapositiva 2"></button>
+                        <button type="button" data-bs-target="#carruselDestacados" data-bs-slide-to="2"
+                                aria-label="Diapositiva 3"></button>
+                    </div>
+
+                    <div class="carousel-inner">
+
+                        <!-- Diapositiva 1 -->
+                        <div class="carousel-item active" data-bs-interval="3000">
+                            <div class="px-5 pt-4 pb-5">
+                                <div class="row g-4 align-items-center">
+                                    <div class="col-8 col-sm-6 col-md-5 mx-auto">
+                                        <img class="d-block w-100 h-auto rounded" src="img/juego-ghost-of-yotei.jpg"
+                                             alt="Portada del videojuego Ghost of Yōtei" width="1024" height="1024">
+                                    </div>
+                                    <div class="col-md-7">
+                                        <p class="small text-uppercase fw-semibold text-body-secondary mb-2">Mundo abierto</p>
+                                        <h3 class="h4">Ghost of Yōtei</h3>
+                                        <p class="text-body-secondary">
+                                            Ambientado en el Japón de 1603, en las tierras del monte Yōtei.
+                                            Desarrollado por Sucker Punch Productions.
+                                        </p>
+                                        <p class="fs-5 fw-semibold">$69.990</p>
+                                        <a class="btn btn-dark" href="#contacto"
+                                           aria-label="Consultar por Ghost of Yōtei">Consultar</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Diapositiva 2 -->
+                        <div class="carousel-item" data-bs-interval="3000">
+                            <div class="px-5 pt-4 pb-5">
+                                <div class="row g-4 align-items-center">
+                                    <div class="col-8 col-sm-6 col-md-5 mx-auto">
+                                        <img class="d-block w-100 h-auto rounded" src="img/juego-astro-bot.jpg"
+                                             alt="Portada del videojuego Astro Bot" width="1024" height="1024">
+                                    </div>
+                                    <div class="col-md-7">
+                                        <p class="small text-uppercase fw-semibold text-body-secondary mb-2">Plataformas</p>
+                                        <h3 class="h4">Astro Bot</h3>
+                                        <p class="text-body-secondary">
+                                            Plataformas en 3D con más de 80 niveles y homenajes a la historia de PlayStation.
+                                            Desarrollado por Team Asobi.
+                                        </p>
+                                        <p class="fs-5 fw-semibold">$54.990</p>
+                                        <a class="btn btn-dark" href="#contacto"
+                                           aria-label="Consultar por Astro Bot">Consultar</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Diapositiva 3 -->
+                        <div class="carousel-item" data-bs-interval="3000">
+                            <div class="px-5 pt-4 pb-5">
+                                <div class="row g-4 align-items-center">
+                                    <div class="col-8 col-sm-6 col-md-5 mx-auto">
+                                        <img class="d-block w-100 h-auto rounded" src="img/juego-spider-man-2.jpg"
+                                             alt="Portada del videojuego Marvel's Spider-Man 2" width="1024" height="1024">
+                                    </div>
+                                    <div class="col-md-7">
+                                        <p class="small text-uppercase fw-semibold text-body-secondary mb-2">Acción y aventura</p>
+                                        <h3 class="h4">Marvel's Spider-Man 2</h3>
+                                        <p class="text-body-secondary">
+                                            Peter Parker y Miles Morales se enfrentan a Venom en Nueva York.
+                                            Desarrollado por Insomniac Games.
+                                        </p>
+                                        <p class="fs-5 fw-semibold">$59.990</p>
+                                        <a class="btn btn-dark" href="#contacto"
+                                           aria-label="Consultar por Marvel's Spider-Man 2">Consultar</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Controles anterior / siguiente -->
+                    <button class="carousel-control-prev" type="button"
+                            data-bs-target="#carruselDestacados" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Anterior</span>
+                    </button>
+                    <button class="carousel-control-next" type="button"
+                            data-bs-target="#carruselDestacados" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Siguiente</span>
+                    </button>
+
+                </div>
             </div>
+        </section>
 
-            <form class="formulario" action="#contacto" method="post">
+        <!-- =================================================================
+             CATÁLOGO (sistema de cuadrículas + componente card)
+             Fila de 12 columnas: barra lateral de 3 y productos de 9 desde lg.
+             ============================================================== -->
+        <section id="catalogo" class="py-5 border-bottom" aria-labelledby="titulo-catalogo">
+            <div class="container">
 
-                <p class="formulario__nota">
-                    Los campos marcados con <span class="campo__marca">*</span> son obligatorios.
-                </p>
+                <h2 id="titulo-catalogo" class="h3">Catálogo</h2>
+                <p class="text-body-secondary mb-4">Los títulos más vendidos de la semana en nuestra tienda.</p>
 
-                <fieldset class="formulario__grupo">
-                    <legend class="formulario__leyenda">Tus datos</legend>
+                <div class="row g-4">
 
-                    <p class="campo">
-                        <label class="campo__etiqueta" for="nombre">Nombre completo
-                            <span class="campo__marca" aria-hidden="true">*</span></label>
-                        <input class="campo__control" type="text" id="nombre" name="nombre"
-                               placeholder="Ej: Diego Carvajal" required>
-                    </p>
+                    <!-- Barra lateral: 12 columnas en móvil y tablet, 3 desde lg -->
+                    <aside class="col-lg-3" aria-labelledby="titulo-categorias">
 
-                    <p class="campo">
-                        <label class="campo__etiqueta" for="correo">Correo electrónico
-                            <span class="campo__marca" aria-hidden="true">*</span></label>
-                        <input class="campo__control" type="email" id="correo" name="correo"
-                               placeholder="tucorreo@ejemplo.cl" required>
-                    </p>
+                        <h3 id="titulo-categorias" class="small text-uppercase fw-semibold mb-3">Categorías</h3>
+                        <!-- Utilidades flex: etiquetas en fila en móvil, columna desde lg -->
+                        <ul class="list-unstyled d-flex flex-wrap flex-lg-column align-items-lg-start gap-2 mb-4">
+                            <li><span class="badge text-bg-light border fw-normal">Acción y aventura</span></li>
+                            <li><span class="badge text-bg-light border fw-normal">Rol (RPG)</span></li>
+                            <li><span class="badge text-bg-light border fw-normal">Carreras y simulación</span></li>
+                            <li><span class="badge text-bg-light border fw-normal">Plataformas</span></li>
+                            <li><span class="badge text-bg-light border fw-normal">Consolas y accesorios</span></li>
+                        </ul>
 
-                    <p class="campo">
-                        <label class="campo__etiqueta" for="telefono">Teléfono</label>
-                        <input class="campo__control" type="tel" id="telefono" name="telefono"
-                               placeholder="+56 9 1234 5678">
-                    </p>
-                </fieldset>
+                        <h3 class="small text-uppercase fw-semibold mb-2">Envío</h3>
+                        <ul class="list-group list-group-flush small">
+                            <li class="list-group-item bg-transparent px-0">Retiro en tienda sin costo</li>
+                            <li class="list-group-item bg-transparent px-0">Despacho a todo Chile</li>
+                            <li class="list-group-item bg-transparent px-0">Garantía oficial de 12 meses</li>
+                        </ul>
 
-                <fieldset class="formulario__grupo">
-                    <legend class="formulario__leyenda">Tu consulta</legend>
+                    </aside>
 
-                    <p class="campo">
-                        <label class="campo__etiqueta" for="juego">Juego de interés</label>
-                        <input class="campo__control" type="text" id="juego" name="juego"
-                               list="catalogo" placeholder="Escribe o elige un título">
-                        <datalist id="catalogo">
-                            <option value="Marvel's Spider-Man 2"></option>
-                            <option value="God of War Ragnarök"></option>
-                            <option value="Ghost of Yōtei"></option>
-                            <option value="Gran Turismo 7"></option>
-                            <option value="Astro Bot"></option>
-                            <option value="Horizon Forbidden West"></option>
-                        </datalist>
-                    </p>
+                    <!-- Productos: 12 columnas en móvil y tablet, 9 desde lg -->
+                    <div class="col-lg-9">
+                        <!-- Cada tarjeta: 1 por fila en móvil, 2 desde md y 3 desde xl -->
+                        <div class="row g-4">
 
-                    <p class="campo">
-                        <label class="campo__etiqueta" for="motivo">Motivo del contacto</label>
-                        <select class="campo__control" id="motivo" name="motivo">
-                            <option value="disponibilidad">Consultar disponibilidad</option>
-                            <option value="despacho">Despacho a regiones</option>
-                            <option value="garantia">Garantía y postventa</option>
-                            <option value="otro">Otro</option>
-                        </select>
-                    </p>
+                            <div class="col-12 col-md-6 col-xl-4">
+                                <article class="card h-100">
+                                    <img class="card-img-top h-auto" src="img/juego-spider-man-2.jpg"
+                                         alt="Portada del videojuego Marvel's Spider-Man 2" width="1024" height="1024" loading="lazy">
+                                    <div class="card-body">
+                                        <h3 class="card-title h6">Marvel's Spider-Man 2</h3>
+                                        <p class="card-text small text-body-secondary">
+                                            Acción y aventura. Peter Parker y Miles Morales se enfrentan a Venom en Nueva York.
+                                            Desarrollado por Insomniac Games.
+                                        </p>
+                                    </div>
+                                    <footer class="card-footer bg-transparent d-flex align-items-center justify-content-between gap-2">
+                                        <p class="fw-semibold mb-0">$59.990</p>
+                                        <a class="btn btn-outline-dark btn-sm" href="#contacto"
+                                           aria-label="Consultar por Marvel's Spider-Man 2">Consultar</a>
+                                    </footer>
+                                </article>
+                            </div>
 
-                    <fieldset class="formulario__opciones">
-                        <legend class="formulario__leyenda formulario__leyenda--menor">Forma de entrega</legend>
+                            <div class="col-12 col-md-6 col-xl-4">
+                                <article class="card h-100">
+                                    <img class="card-img-top h-auto" src="img/juego-god-of-war-ragnarok.jpg"
+                                         alt="Portada del videojuego God of War Ragnarök" width="1024" height="1024" loading="lazy">
+                                    <div class="card-body">
+                                        <h3 class="card-title h6">God of War Ragnarök</h3>
+                                        <p class="card-text small text-body-secondary">
+                                            Acción y aventura. Kratos y Atreus recorren los nueve reinos ante la llegada del Ragnarök.
+                                            Desarrollado por Santa Monica Studio.
+                                        </p>
+                                    </div>
+                                    <footer class="card-footer bg-transparent d-flex align-items-center justify-content-between gap-2">
+                                        <p class="fw-semibold mb-0">$44.990</p>
+                                        <a class="btn btn-outline-dark btn-sm" href="#contacto"
+                                           aria-label="Consultar por God of War Ragnarök">Consultar</a>
+                                    </footer>
+                                </article>
+                            </div>
 
-                        <p class="opcion">
-                            <input type="radio" id="retiro" name="entrega" value="retiro" checked>
-                            <label for="retiro">Retiro en tienda</label>
-                        </p>
+                            <div class="col-12 col-md-6 col-xl-4">
+                                <article class="card h-100">
+                                    <img class="card-img-top h-auto" src="img/juego-ghost-of-yotei.jpg"
+                                         alt="Portada del videojuego Ghost of Yōtei" width="1024" height="1024" loading="lazy">
+                                    <div class="card-body">
+                                        <h3 class="card-title h6">Ghost of Yōtei</h3>
+                                        <p class="card-text small text-body-secondary">
+                                            Mundo abierto ambientado en el Japón de 1603, en las tierras del monte Yōtei.
+                                            Desarrollado por Sucker Punch Productions.
+                                        </p>
+                                    </div>
+                                    <footer class="card-footer bg-transparent d-flex align-items-center justify-content-between gap-2">
+                                        <p class="fw-semibold mb-0">$69.990</p>
+                                        <a class="btn btn-outline-dark btn-sm" href="#contacto"
+                                           aria-label="Consultar por Ghost of Yōtei">Consultar</a>
+                                    </footer>
+                                </article>
+                            </div>
 
-                        <p class="opcion">
-                            <input type="radio" id="despacho" name="entrega" value="despacho">
-                            <label for="despacho">Despacho a domicilio</label>
-                        </p>
-                    </fieldset>
+                            <div class="col-12 col-md-6 col-xl-4">
+                                <article class="card h-100">
+                                    <img class="card-img-top h-auto" src="img/juego-gran-turismo-7.jpg"
+                                         alt="Portada del videojuego Gran Turismo 7" width="1024" height="1024" loading="lazy">
+                                    <div class="card-body">
+                                        <h3 class="card-title h6">Gran Turismo 7</h3>
+                                        <p class="card-text small text-body-secondary">
+                                            Simulador de carreras con más de 400 vehículos y circuitos reales.
+                                            Desarrollado por Polyphony Digital.
+                                        </p>
+                                    </div>
+                                    <footer class="card-footer bg-transparent d-flex align-items-center justify-content-between gap-2">
+                                        <p class="fw-semibold mb-0">$49.990</p>
+                                        <a class="btn btn-outline-dark btn-sm" href="#contacto"
+                                           aria-label="Consultar por Gran Turismo 7">Consultar</a>
+                                    </footer>
+                                </article>
+                            </div>
 
-                    <p class="campo campo--ancho">
-                        <label class="campo__etiqueta" for="mensaje">Mensaje
-                            <span class="campo__marca" aria-hidden="true">*</span></label>
-                        <textarea class="campo__control" id="mensaje" name="mensaje" rows="5"
-                                  placeholder="Cuéntanos en qué te podemos ayudar" required></textarea>
-                    </p>
+                            <div class="col-12 col-md-6 col-xl-4">
+                                <article class="card h-100">
+                                    <img class="card-img-top h-auto" src="img/juego-astro-bot.jpg"
+                                         alt="Portada del videojuego Astro Bot" width="1024" height="1024" loading="lazy">
+                                    <div class="card-body">
+                                        <h3 class="card-title h6">Astro Bot</h3>
+                                        <p class="card-text small text-body-secondary">
+                                            Plataformas en 3D con más de 80 niveles y homenajes a la historia de PlayStation.
+                                            Desarrollado por Team Asobi.
+                                        </p>
+                                    </div>
+                                    <footer class="card-footer bg-transparent d-flex align-items-center justify-content-between gap-2">
+                                        <p class="fw-semibold mb-0">$54.990</p>
+                                        <a class="btn btn-outline-dark btn-sm" href="#contacto"
+                                           aria-label="Consultar por Astro Bot">Consultar</a>
+                                    </footer>
+                                </article>
+                            </div>
 
-                    <p class="opcion">
-                        <input type="checkbox" id="novedades" name="novedades" value="si">
-                        <label for="novedades">Quiero recibir novedades y ofertas por correo</label>
-                    </p>
-                </fieldset>
+                            <div class="col-12 col-md-6 col-xl-4">
+                                <article class="card h-100">
+                                    <img class="card-img-top h-auto" src="img/juego-horizon-forbidden-west.jpg"
+                                         alt="Portada del videojuego Horizon Forbidden West" width="1024" height="1024" loading="lazy">
+                                    <div class="card-body">
+                                        <h3 class="card-title h6">Horizon Forbidden West</h3>
+                                        <p class="card-text small text-body-secondary">
+                                            Acción y rol en mundo abierto. Aloy explora el oeste prohibido enfrentando máquinas.
+                                            Desarrollado por Guerrilla Games.
+                                        </p>
+                                    </div>
+                                    <footer class="card-footer bg-transparent d-flex align-items-center justify-content-between gap-2">
+                                        <p class="fw-semibold mb-0">$39.990</p>
+                                        <a class="btn btn-outline-dark btn-sm" href="#contacto"
+                                           aria-label="Consultar por Horizon Forbidden West">Consultar</a>
+                                    </footer>
+                                </article>
+                            </div>
 
-                <p class="formulario__acciones">
-                    <button class="boton boton--principal" type="submit">Enviar consulta</button>
-                    <button class="boton boton--secundario" type="reset">Limpiar</button>
-                </p>
+                        </div>
+                    </div>
 
-            </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- =================================================================
+             CONTACTO (cuadrícula dentro del formulario)
+             ============================================================== -->
+        <section id="contacto" class="py-5" aria-labelledby="titulo-contacto">
+            <div class="container">
+
+                <h2 id="titulo-contacto" class="h3">Contacto</h2>
+                <p class="text-body-secondary mb-4">¿Buscas un título o quieres saber del despacho? Escríbenos.</p>
+
+                <div class="row g-4">
+
+                    <!-- Datos de la tienda: 4 columnas desde lg -->
+                    <div class="col-lg-4">
+                        <address class="mb-0">
+                            <strong>PixelPlay Store</strong><br>
+                            Avenida Providencia 1234, local 15<br>
+                            Santiago de Chile<br>
+                            <a href="tel:+56223456789">+56 2 2345 6789</a><br>
+                            <a href="mailto:contacto@pixelplay.cl">contacto@pixelplay.cl</a>
+                        </address>
+                        <p class="small text-body-secondary mt-3 mb-0">Lunes a viernes, 10:00 a 19:00</p>
+                    </div>
+
+                    <!-- Formulario: 8 columnas desde lg -->
+                    <div class="col-lg-8">
+                        <form class="border rounded p-4" action="#contacto" method="post">
+
+                            <p class="small text-body-secondary">
+                                Los campos marcados con asterisco <span aria-hidden="true">(*)</span> son obligatorios.
+                            </p>
+
+                            <fieldset class="mb-4">
+                                <legend class="small text-uppercase fw-semibold mb-3">Tus datos</legend>
+                                <!-- Campos a lo ancho en móvil, de a dos desde md -->
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="nombre">Nombre completo <span aria-hidden="true">*</span></label>
+                                        <input class="form-control" type="text" id="nombre" name="nombre"
+                                               autocomplete="name" placeholder="Ej: Diego Carvajal" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="correo">Correo electrónico <span aria-hidden="true">*</span></label>
+                                        <input class="form-control" type="email" id="correo" name="correo"
+                                               autocomplete="email" placeholder="tucorreo@ejemplo.cl" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="telefono">Teléfono</label>
+                                        <input class="form-control" type="tel" id="telefono" name="telefono"
+                                               autocomplete="tel" placeholder="+56 9 1234 5678">
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset class="mb-4">
+                                <legend class="small text-uppercase fw-semibold mb-3">Tu consulta</legend>
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="juego">Juego de interés</label>
+                                        <input class="form-control" type="text" id="juego" name="juego"
+                                               list="catalogoJuegos" placeholder="Escribe o elige un título">
+                                        <datalist id="catalogoJuegos">
+                                            <option value="Marvel's Spider-Man 2"></option>
+                                            <option value="God of War Ragnarök"></option>
+                                            <option value="Ghost of Yōtei"></option>
+                                            <option value="Gran Turismo 7"></option>
+                                            <option value="Astro Bot"></option>
+                                            <option value="Horizon Forbidden West"></option>
+                                        </datalist>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="motivo">Motivo del contacto</label>
+                                        <select class="form-select" id="motivo" name="motivo">
+                                            <option value="disponibilidad">Consultar disponibilidad</option>
+                                            <option value="despacho">Despacho a regiones</option>
+                                            <option value="garantia">Garantía y postventa</option>
+                                            <option value="otro">Otro</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12">
+                                        <fieldset>
+                                            <legend class="form-label fs-6 mb-2">Forma de entrega</legend>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="entrega"
+                                                       id="retiro" value="retiro" checked>
+                                                <label class="form-check-label" for="retiro">Retiro en tienda</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="entrega"
+                                                       id="despacho" value="despacho">
+                                                <label class="form-check-label" for="despacho">Despacho a domicilio</label>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="form-label" for="mensaje">Mensaje <span aria-hidden="true">*</span></label>
+                                        <textarea class="form-control" id="mensaje" name="mensaje" rows="5"
+                                                  placeholder="Cuéntanos en qué te podemos ayudar" required></textarea>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="novedades"
+                                                   name="novedades" value="si">
+                                            <label class="form-check-label" for="novedades">
+                                                Quiero recibir novedades y ofertas por correo
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <!-- Botones: uno bajo otro en móvil, en fila a la derecha desde sm -->
+                            <div class="d-flex flex-column flex-sm-row justify-content-sm-end gap-2 border-top pt-3">
+                                <button class="btn btn-outline-secondary" type="reset">Limpiar</button>
+                                <button class="btn btn-dark" type="submit">Enviar consulta</button>
+                            </div>
+
+                        </form>
+                    </div>
+
+                </div>
+            </div>
         </section>
 
     </main>
 
-    <!-- Pie de página: columnas con Flexbox -->
-    <footer class="pie">
-        <div class="contenedor pie__interior">
+    <!-- =====================================================================
+         PIE DE PÁGINA: tres bloques de 4 columnas desde lg
+         ================================================================== -->
+    <footer class="pie border-top bg-body-tertiary py-5">
+        <div class="container">
 
-            <div class="pie__bloque">
-                <h2 class="pie__titulo">PixelPlay Store</h2>
-                <p>Avenida Providencia 1234, local 15<br>Santiago de Chile</p>
+            <div class="row g-4">
+                <div class="col-sm-6 col-lg-4">
+                    <h2 class="small text-uppercase fw-semibold mb-2">PixelPlay Store</h2>
+                    <p class="small text-body-secondary mb-0">Avenida Providencia 1234, local 15<br>Santiago de Chile</p>
+                </div>
+                <div class="col-sm-6 col-lg-4">
+                    <h2 class="small text-uppercase fw-semibold mb-2">Síguenos</h2>
+                    <ul class="list-unstyled small mb-0">
+                        <li><a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer">Instagram<span aria-hidden="true"> ↗</span><span class="visually-hidden"> (se abre en una pestaña nueva)</span></a></li>
+                        <li><a href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer">YouTube<span aria-hidden="true"> ↗</span><span class="visually-hidden"> (se abre en una pestaña nueva)</span></a></li>
+                        <li><a href="https://www.twitch.tv/" target="_blank" rel="noopener noreferrer">Twitch<span aria-hidden="true"> ↗</span><span class="visually-hidden"> (se abre en una pestaña nueva)</span></a></li>
+                    </ul>
+                </div>
+                <div class="col-sm-6 col-lg-4">
+                    <h2 class="small text-uppercase fw-semibold mb-2">Atención</h2>
+                    <p class="small text-body-secondary mb-0">Lunes a viernes, 10:00 a 19:00<br>+56 2 2345 6789</p>
+                </div>
             </div>
 
-            <div class="pie__bloque">
-                <h2 class="pie__titulo">Síguenos</h2>
-                <ul class="redes">
-                    <li><a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer">Instagram</a></li>
-                    <li><a href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer">YouTube</a></li>
-                    <li><a href="https://www.twitch.tv/" target="_blank" rel="noopener noreferrer">Twitch</a></li>
-                </ul>
-            </div>
-
-            <div class="pie__bloque">
-                <h2 class="pie__titulo">Atención</h2>
-                <p>Lunes a viernes, 10:00 a 19:00<br>+56 2 2345 6789</p>
-            </div>
+            <p class="small text-body-secondary border-top pt-3 mt-4 mb-0">Copyright &copy; 2026 PixelPlay Store.</p>
 
         </div>
-
-        <p class="pie__copyright">Copyright &copy; 2026 PixelPlay Store.</p>
     </footer>
+
+    <!-- Bootstrap 5.3.8 con Popper incluido: hace funcionar el colapso del
+         menú y el carrusel. Va al final para no retrasar el dibujo de la página. -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+            crossorigin="anonymous"></script>
+
+    <!-- Ajustes al carrusel de Bootstrap:
+         1) Alto estable, para que la página no salte al cambiar de diapositiva.
+         2) Rotación detenible. Bootstrap solo la detiene con el mouse encima; quien
+            navega con teclado o lector de pantalla también necesita poder pararla
+            (WCAG 2.2.2), y el enlace que tiene enfocado no debe desaparecer al
+            cambiar la diapositiva. Se detiene con el botón Pausar y mientras el
+            foco del teclado esté dentro del carrusel. -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const elemento = document.getElementById('carruselDestacados');
+            const boton = document.getElementById('botonPausa');
+            if (!elemento || !boton || !window.bootstrap) return;
+
+            // 1) Alto estable. Cada diapositiva mide distinto según cuántas líneas
+            // ocupe su descripción en ese ancho de pantalla. El contenedor toma el
+            // alto de la más alta y se recalcula cuando carga la tipografía y cuando
+            // cambia el tamaño de la ventana.
+            const interior = elemento.querySelector('.carousel-inner');
+            const igualarAlto = () => {
+                interior.style.minHeight = '';
+                const altos = [...interior.children].map((item) => {
+                    const oculta = !item.classList.contains('active');
+                    if (oculta) item.style.display = 'block';
+                    const alto = item.offsetHeight;
+                    if (oculta) item.style.display = '';
+                    return alto;
+                });
+                interior.style.minHeight = `${Math.max(...altos)}px`;
+            };
+            igualarAlto();
+            document.fonts.ready.then(igualarAlto);
+            window.addEventListener('resize', igualarAlto);
+
+            // 2) Rotación detenible. El carrusel avanza solo si nadie lo pausó y el
+            // foco no está dentro. Quien pidió reducir el movimiento empieza en pausa.
+            let pausado = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            let focoDentro = false;
+            let aplicado = null;
+
+            // Recrea el carrusel con ride 'carousel' (avanza solo) o false (queda
+            // quieto: ni el mouse ni las flechas lo vuelven a poner en marcha).
+            // Solo actúa cuando el estado cambia.
+            const aplicar = () => {
+                const automatico = !pausado && !focoDentro;
+                if (automatico === aplicado) return;
+
+                // Recrearlo a mitad de un cambio de diapositiva dejaría dos activas
+                // a la vez: se espera a que Bootstrap termine la transición.
+                if (elemento.querySelector('.carousel-item-next, .carousel-item-prev')) {
+                    elemento.addEventListener('slid.bs.carousel', aplicar, { once: true });
+                    return;
+                }
+
+                const anterior = bootstrap.Carousel.getInstance(elemento);
+                if (anterior) {
+                    // dispose() no detiene los temporizadores de la instancia: se
+                    // detienen antes, para que no queden corriendo sobre ella.
+                    anterior.pause();
+                    clearTimeout(anterior.touchTimeout);
+                    anterior.dispose();
+                }
+                new bootstrap.Carousel(elemento, { ride: automatico ? 'carousel' : false });
+                aplicado = automatico;
+            };
+
+            // Pausa mientras el foco del teclado está dentro del carrusel
+            elemento.addEventListener('focusin', () => {
+                focoDentro = true;
+                aplicar();
+            });
+            elemento.addEventListener('focusout', (evento) => {
+                if (elemento.contains(evento.relatedTarget)) return;
+                focoDentro = false;
+                aplicar();
+            });
+
+            const actualizarBoton = () => {
+                boton.textContent = pausado ? 'Reanudar' : 'Pausar';
+            };
+
+            aplicar();
+            actualizarBoton();
+            boton.hidden = false;
+
+            boton.addEventListener('click', () => {
+                pausado = !pausado;
+                aplicar();
+                actualizarBoton();
+            });
+        });
+    </script>
 
 </body>
 
