@@ -1,0 +1,59 @@
+{
+  "categorias": [
+    "Acción y aventura",
+    "Rol (RPG)",
+    "Carreras y simulación",
+    "Plataformas",
+    "Consolas y accesorios"
+  ],
+  "juegos": [
+    {
+      "titulo": "Marvel's Spider-Man 2",
+      "categoria": "Acción y aventura",
+      "descripcion": "Peter Parker y Miles Morales se enfrentan a Venom en Nueva York.",
+      "desarrollador": "Insomniac Games",
+      "precio": 59990,
+      "imagen": "img/juego-spider-man-2.jpg"
+    },
+    {
+      "titulo": "God of War Ragnarök",
+      "categoria": "Acción y aventura",
+      "descripcion": "Kratos y Atreus recorren los nueve reinos ante la llegada del Ragnarök.",
+      "desarrollador": "Santa Monica Studio",
+      "precio": 44990,
+      "imagen": "img/juego-god-of-war-ragnarok.jpg"
+    },
+    {
+      "titulo": "Ghost of Yōtei",
+      "categoria": "Acción y aventura",
+      "descripcion": "Mundo abierto ambientado en el Japón de 1603, en las tierras del monte Yōtei.",
+      "desarrollador": "Sucker Punch Productions",
+      "precio": 69990,
+      "imagen": "img/juego-ghost-of-yotei.jpg"
+    },
+    {
+      "titulo": "Gran Turismo 7",
+      "categoria": "Carreras y simulación",
+      "descripcion": "Simulador de carreras con más de 400 vehículos y circuitos reales.",
+      "desarrollador": "Polyphony Digital",
+      "precio": 49990,
+      "imagen": "img/juego-gran-turismo-7.jpg"
+    },
+    {
+      "titulo": "Astro Bot",
+      "categoria": "Plataformas",
+      "descripcion": "Plataformas en 3D con más de 80 niveles y homenajes a la historia de PlayStation.",
+      "desarrollador": "Team Asobi",
+      "precio": 54990,
+      "imagen": "img/juego-astro-bot.jpg"
+    },
+    {
+      "titulo": "Horizon Forbidden West",
+      "categoria": "Rol (RPG)",
+      "descripcion": "Acción y rol en mundo abierto. Aloy explora el oeste prohibido enfrentando máquinas.",
+      "desarrollador": "Guerrilla Games",
+      "precio": 39990,
+      "imagen": "img/juego-horizon-forbidden-west.jpg"
+    }
+  ]
+}

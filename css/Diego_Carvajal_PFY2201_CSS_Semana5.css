@@ -3,7 +3,7 @@
 /* =============================================================================
    PixelPlay Store — Ajustes sobre Bootstrap 5.3.8
    Asignatura : Desarrollo Frontend I (PFY2201)
-   Actividad  : Exp 2 · Semana 4 — "Utilizando Bootstrap 5 para el diseño responsivo"
+   Actividad  : Exp 2 · Semana 5 — "Manipulando el DOM con JavaScript para mejorar la interactividad"
    Autor      : Diego Carvajal
 
    Esta hoja no reemplaza a Bootstrap ni reconstruye nada que Bootstrap ya
@@ -17,11 +17,18 @@
    foco del teclado (menú, flechas del carrusel y formularios), las casillas
    marcadas y el ancho de las flechas del carrusel.
 
+   Desde la Semana 5 también da estilo a los estados que agrega JavaScript: la
+   tarjeta resaltada con el puntero o el teclado, los errores del formulario y
+   el foco en los elementos a los que el script lleva el foco.
+
    Contenido:
      1. Variables globales de Bootstrap
      2. Barra de navegación
      3. Carrusel de destacados
      4. Formularios
+     5. Catálogo dinámico
+     6. Validación del formulario
+     7. Foco en destinos del script
    ========================================================================== */
 
 
@@ -62,6 +69,11 @@
     --bs-border-radius-sm: 0.125rem;
     --bs-border-radius-lg: 0.25rem;
 
+    /* --- Errores de formulario: un rojo más oscuro que el #dc3545 de Bootstrap,
+           que da 4,53:1 sobre blanco; #b02a37 da 6,5:1. Es la única excepción
+           a la paleta y solo aparece en campos con error. --- */
+    --bs-form-invalid-color:        #b02a37;
+    --bs-form-invalid-border-color: #b02a37;
 }
 
 
@@ -147,4 +159,63 @@
 .form-check-input:checked {
     background-color: var(--pp-acento);
     border-color: var(--pp-acento);
+}
+
+
+/* =============================================================================
+   5. CATÁLOGO DINÁMICO
+   ========================================================================== */
+
+/* Tarjeta bajo el puntero o con el foco del teclado: el script le pone esta
+   clase con mouseover y focusin. Solo cambia el color de su línea de 1 px, sin
+   sombra, desplazamiento ni transición. Se usa border-color y no la variable
+   --bs-card-border-color para no teñir también la línea superior del pie. */
+.card.tarjeta-resaltada {
+    border-color: var(--pp-acento);
+}
+
+/* Foco del teclado en un filtro. Bootstrap rellena de negro el botón enfocado,
+   igual que el filtro activo, y con teclado parecía que había dos categorías
+   elegidas. En los filtros no activos el foco queda solo con el anillo de
+   Bootstrap y el relleno sigue indicando cuál está aplicado. */
+.btn[data-categoria]:not(.active):focus-visible {
+    color: var(--bs-btn-color);
+    background-color: var(--bs-btn-bg);
+}
+
+
+/* =============================================================================
+   6. VALIDACIÓN DEL FORMULARIO
+   Bootstrap dibuja en los campos con error un ícono con el rojo #dc3545 fijo
+   dentro de un SVG (sin variable que redefinir) y les reserva un hueco a la
+   derecha, también en textarea, donde su regla pesa más. Se quitan ambos: el
+   error ya se comunica con el borde y con el texto bajo el campo.
+   ========================================================================== */
+.form-control.is-invalid,
+textarea.form-control.is-invalid {
+    padding-right: 0.75rem;
+    background-image: none;
+}
+
+/* Foco en un campo con error. Bootstrap solo agrega un halo rojo al 25 % sobre
+   un borde que ya es rojo, casi imperceptible, y su regla pesa más que la de la
+   sección 4. El borde sigue rojo (error) y el foco se dibuja por fuera con el
+   acento, como en el resto del sitio. */
+.form-control.is-invalid:focus {
+    box-shadow: none;
+    outline: 2px solid var(--pp-acento);
+    outline-offset: 2px;
+}
+
+
+/* =============================================================================
+   7. FOCO EN DESTINOS DEL SCRIPT
+   El título del catálogo recibe el foco desde JavaScript al pulsar Reintentar
+   (tabindex="-1"). Bootstrap 5.3.8 no trae regla para ese caso: con teclado se
+   dibuja el mismo contorno de acento; tras un clic, :focus-visible no dibuja
+   nada.
+   ========================================================================== */
+[tabindex="-1"]:focus-visible {
+    outline: 2px solid var(--pp-acento);
+    outline-offset: 0.25rem;
 }

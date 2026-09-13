@@ -20,9 +20,10 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;display=swap">
 
     <!-- Hoja propia: ajusta variables de Bootstrap y agrega unas pocas reglas
-         (foco, menú activo y carrusel). Va después de bootstrap.min.css para
-         que, a igual especificidad, sus valores prevalezcan. -->
-    <link rel="stylesheet" href="css/Diego_Carvajal_PFY2201_CSS_Semana4.css">
+         (foco, menú activo, carrusel, tarjeta resaltada y errores del formulario).
+         Va después de bootstrap.min.css para que, a igual especificidad, sus
+         valores prevalezcan. -->
+    <link rel="stylesheet" href="css/Diego_Carvajal_PFY2201_CSS_Semana5.css">
 </head>
 
 <body>
@@ -99,8 +100,9 @@
              DESTACADOS (componente carousel)
              data-bs-ride="carousel": arranque automático al cargar la página.
              data-bs-interval="3000" en cada diapositiva: cambia cada 3 s.
-             El script del final recrea el carrusel cambiando esa opción: false para
-             detenerlo (botón Pausar y foco del teclado) y 'carousel' para reanudarlo.
+             iniciarCarrusel(), en js/Diego_Carvajal_PFY2201_DOM_Semana5.js, recrea
+             el carrusel cambiando esa opción: false para detenerlo (botón Pausar
+             y foco del teclado) y 'carousel' para reanudarlo.
              ============================================================== -->
         <section id="destacados" class="destacados py-5 border-bottom" aria-labelledby="titulo-destacados">
             <div class="container">
@@ -135,14 +137,14 @@
                                              alt="Portada del videojuego Ghost of Yōtei" width="1024" height="1024">
                                     </div>
                                     <div class="col-md-7">
-                                        <p class="small text-uppercase fw-semibold text-body-secondary mb-2">Mundo abierto</p>
+                                        <p class="small text-uppercase fw-semibold text-body-secondary mb-2">Acción y aventura</p>
                                         <h3 class="h4">Ghost of Yōtei</h3>
                                         <p class="text-body-secondary">
                                             Ambientado en el Japón de 1603, en las tierras del monte Yōtei.
                                             Desarrollado por Sucker Punch Productions.
                                         </p>
                                         <p class="fs-5 fw-semibold">$69.990</p>
-                                        <a class="btn btn-dark" href="#contacto"
+                                        <a class="btn btn-dark" href="#contacto" data-juego="Ghost of Yōtei"
                                            aria-label="Consultar por Ghost of Yōtei">Consultar</a>
                                     </div>
                                 </div>
@@ -165,7 +167,7 @@
                                             Desarrollado por Team Asobi.
                                         </p>
                                         <p class="fs-5 fw-semibold">$54.990</p>
-                                        <a class="btn btn-dark" href="#contacto"
+                                        <a class="btn btn-dark" href="#contacto" data-juego="Astro Bot"
                                            aria-label="Consultar por Astro Bot">Consultar</a>
                                     </div>
                                 </div>
@@ -188,7 +190,7 @@
                                             Desarrollado por Insomniac Games.
                                         </p>
                                         <p class="fs-5 fw-semibold">$59.990</p>
-                                        <a class="btn btn-dark" href="#contacto"
+                                        <a class="btn btn-dark" href="#contacto" data-juego="Marvel's Spider-Man 2"
                                            aria-label="Consultar por Marvel's Spider-Man 2">Consultar</a>
                                     </div>
                                 </div>
@@ -216,11 +218,14 @@
         <!-- =================================================================
              CATÁLOGO (sistema de cuadrículas + componente card)
              Fila de 12 columnas: barra lateral de 3 y productos de 9 desde lg.
+             Los filtros y las tarjetas los construye el script con los datos de
+             data/catalogo.json (Fetch API).
              ============================================================== -->
         <section id="catalogo" class="py-5 border-bottom" aria-labelledby="titulo-catalogo">
             <div class="container">
 
-                <h2 id="titulo-catalogo" class="h3">Catálogo</h2>
+                <!-- tabindex="-1": el script le da el foco al pulsar Reintentar -->
+                <h2 id="titulo-catalogo" class="h3" tabindex="-1">Catálogo</h2>
                 <p class="text-body-secondary mb-4">Los títulos más vendidos de la semana en nuestra tienda.</p>
 
                 <div class="row g-4">
@@ -228,15 +233,13 @@
                     <!-- Barra lateral: 12 columnas en móvil y tablet, 3 desde lg -->
                     <aside class="col-lg-3" aria-labelledby="titulo-categorias">
 
-                        <h3 id="titulo-categorias" class="small text-uppercase fw-semibold mb-3">Categorías</h3>
-                        <!-- Utilidades flex: etiquetas en fila en móvil, columna desde lg -->
-                        <ul class="list-unstyled d-flex flex-wrap flex-lg-column align-items-lg-start gap-2 mb-4">
-                            <li><span class="badge text-bg-light border fw-normal">Acción y aventura</span></li>
-                            <li><span class="badge text-bg-light border fw-normal">Rol (RPG)</span></li>
-                            <li><span class="badge text-bg-light border fw-normal">Carreras y simulación</span></li>
-                            <li><span class="badge text-bg-light border fw-normal">Plataformas</span></li>
-                            <li><span class="badge text-bg-light border fw-normal">Consolas y accesorios</span></li>
-                        </ul>
+                        <!-- Filtros: el script crea un botón por categoría con los datos
+                             del JSON y quita hidden; sin JavaScript no servirían -->
+                        <div id="bloqueFiltros" hidden>
+                            <h3 id="titulo-categorias" class="small text-uppercase fw-semibold mb-3">Categorías</h3>
+                            <!-- Utilidades flex: botones en fila en móvil, columna desde lg -->
+                            <ul id="filtrosCategorias" class="list-unstyled d-flex flex-wrap flex-lg-column align-items-lg-start gap-2 mb-4"></ul>
+                        </div>
 
                         <h3 class="small text-uppercase fw-semibold mb-2">Envío</h3>
                         <ul class="list-group list-group-flush small">
@@ -249,124 +252,31 @@
 
                     <!-- Productos: 12 columnas en móvil y tablet, 9 desde lg -->
                     <div class="col-lg-9">
-                        <!-- Cada tarjeta: 1 por fila en móvil, 2 desde md y 3 desde xl -->
-                        <div class="row g-4">
 
-                            <div class="col-12 col-md-6 col-xl-4">
-                                <article class="card h-100">
-                                    <img class="card-img-top h-auto" src="img/juego-spider-man-2.jpg"
-                                         alt="Portada del videojuego Marvel's Spider-Man 2" width="1024" height="1024" loading="lazy">
-                                    <div class="card-body">
-                                        <h3 class="card-title h6">Marvel's Spider-Man 2</h3>
-                                        <p class="card-text small text-body-secondary">
-                                            Acción y aventura. Peter Parker y Miles Morales se enfrentan a Venom en Nueva York.
-                                            Desarrollado por Insomniac Games.
-                                        </p>
-                                    </div>
-                                    <footer class="card-footer bg-transparent d-flex align-items-center justify-content-between gap-2">
-                                        <p class="fw-semibold mb-0">$59.990</p>
-                                        <a class="btn btn-outline-dark btn-sm" href="#contacto"
-                                           aria-label="Consultar por Marvel's Spider-Man 2">Consultar</a>
-                                    </footer>
-                                </article>
-                            </div>
-
-                            <div class="col-12 col-md-6 col-xl-4">
-                                <article class="card h-100">
-                                    <img class="card-img-top h-auto" src="img/juego-god-of-war-ragnarok.jpg"
-                                         alt="Portada del videojuego God of War Ragnarök" width="1024" height="1024" loading="lazy">
-                                    <div class="card-body">
-                                        <h3 class="card-title h6">God of War Ragnarök</h3>
-                                        <p class="card-text small text-body-secondary">
-                                            Acción y aventura. Kratos y Atreus recorren los nueve reinos ante la llegada del Ragnarök.
-                                            Desarrollado por Santa Monica Studio.
-                                        </p>
-                                    </div>
-                                    <footer class="card-footer bg-transparent d-flex align-items-center justify-content-between gap-2">
-                                        <p class="fw-semibold mb-0">$44.990</p>
-                                        <a class="btn btn-outline-dark btn-sm" href="#contacto"
-                                           aria-label="Consultar por God of War Ragnarök">Consultar</a>
-                                    </footer>
-                                </article>
-                            </div>
-
-                            <div class="col-12 col-md-6 col-xl-4">
-                                <article class="card h-100">
-                                    <img class="card-img-top h-auto" src="img/juego-ghost-of-yotei.jpg"
-                                         alt="Portada del videojuego Ghost of Yōtei" width="1024" height="1024" loading="lazy">
-                                    <div class="card-body">
-                                        <h3 class="card-title h6">Ghost of Yōtei</h3>
-                                        <p class="card-text small text-body-secondary">
-                                            Mundo abierto ambientado en el Japón de 1603, en las tierras del monte Yōtei.
-                                            Desarrollado por Sucker Punch Productions.
-                                        </p>
-                                    </div>
-                                    <footer class="card-footer bg-transparent d-flex align-items-center justify-content-between gap-2">
-                                        <p class="fw-semibold mb-0">$69.990</p>
-                                        <a class="btn btn-outline-dark btn-sm" href="#contacto"
-                                           aria-label="Consultar por Ghost of Yōtei">Consultar</a>
-                                    </footer>
-                                </article>
-                            </div>
-
-                            <div class="col-12 col-md-6 col-xl-4">
-                                <article class="card h-100">
-                                    <img class="card-img-top h-auto" src="img/juego-gran-turismo-7.jpg"
-                                         alt="Portada del videojuego Gran Turismo 7" width="1024" height="1024" loading="lazy">
-                                    <div class="card-body">
-                                        <h3 class="card-title h6">Gran Turismo 7</h3>
-                                        <p class="card-text small text-body-secondary">
-                                            Simulador de carreras con más de 400 vehículos y circuitos reales.
-                                            Desarrollado por Polyphony Digital.
-                                        </p>
-                                    </div>
-                                    <footer class="card-footer bg-transparent d-flex align-items-center justify-content-between gap-2">
-                                        <p class="fw-semibold mb-0">$49.990</p>
-                                        <a class="btn btn-outline-dark btn-sm" href="#contacto"
-                                           aria-label="Consultar por Gran Turismo 7">Consultar</a>
-                                    </footer>
-                                </article>
-                            </div>
-
-                            <div class="col-12 col-md-6 col-xl-4">
-                                <article class="card h-100">
-                                    <img class="card-img-top h-auto" src="img/juego-astro-bot.jpg"
-                                         alt="Portada del videojuego Astro Bot" width="1024" height="1024" loading="lazy">
-                                    <div class="card-body">
-                                        <h3 class="card-title h6">Astro Bot</h3>
-                                        <p class="card-text small text-body-secondary">
-                                            Plataformas en 3D con más de 80 niveles y homenajes a la historia de PlayStation.
-                                            Desarrollado por Team Asobi.
-                                        </p>
-                                    </div>
-                                    <footer class="card-footer bg-transparent d-flex align-items-center justify-content-between gap-2">
-                                        <p class="fw-semibold mb-0">$54.990</p>
-                                        <a class="btn btn-outline-dark btn-sm" href="#contacto"
-                                           aria-label="Consultar por Astro Bot">Consultar</a>
-                                    </footer>
-                                </article>
-                            </div>
-
-                            <div class="col-12 col-md-6 col-xl-4">
-                                <article class="card h-100">
-                                    <img class="card-img-top h-auto" src="img/juego-horizon-forbidden-west.jpg"
-                                         alt="Portada del videojuego Horizon Forbidden West" width="1024" height="1024" loading="lazy">
-                                    <div class="card-body">
-                                        <h3 class="card-title h6">Horizon Forbidden West</h3>
-                                        <p class="card-text small text-body-secondary">
-                                            Acción y rol en mundo abierto. Aloy explora el oeste prohibido enfrentando máquinas.
-                                            Desarrollado por Guerrilla Games.
-                                        </p>
-                                    </div>
-                                    <footer class="card-footer bg-transparent d-flex align-items-center justify-content-between gap-2">
-                                        <p class="fw-semibold mb-0">$39.990</p>
-                                        <a class="btn btn-outline-dark btn-sm" href="#contacto"
-                                           aria-label="Consultar por Horizon Forbidden West">Consultar</a>
-                                    </footer>
-                                </article>
-                            </div>
-
+                        <!-- Estado de la carga. El indicador gira mientras llega el JSON;
+                             el texto (role="status") lo leen los lectores de pantalla:
+                             cargando, cantidad de juegos mostrados o error -->
+                        <div class="d-flex align-items-center gap-2 mb-3">
+                            <span id="indicadorCarga" class="spinner-border spinner-border-sm text-body-secondary" hidden></span>
+                            <p id="resumenCatalogo" class="small text-body-secondary mb-0" role="status"></p>
                         </div>
+
+                        <!-- Avisos de error y de categoría vacía. El párrafo de respaldo se
+                             ve si JavaScript no corre o el archivo .js no carga; el script
+                             lo elimina al empezar -->
+                        <div id="estadoCatalogo">
+                            <p class="text-body-secondary">
+                                El catálogo se carga con JavaScript. Si no aparece, escríbenos desde el
+                                <a href="#contacto">formulario de contacto</a> y te contamos qué títulos tenemos.
+                            </p>
+                        </div>
+
+                        <!-- Tarjetas creadas por el script: 1 por fila en móvil, 2 desde md y 3 desde xl -->
+                        <div id="listaJuegos" class="row g-4"></div>
+
+                        <!-- Referencia del dólar (mindicador.cl): oculta hasta que responde -->
+                        <p id="referenciaDolar" class="small text-body-secondary mt-4 mb-0" hidden></p>
+
                     </div>
 
                 </div>
@@ -398,7 +308,10 @@
 
                     <!-- Formulario: 8 columnas desde lg -->
                     <div class="col-lg-8">
-                        <form class="border rounded p-4" action="#contacto" method="post">
+                        <form id="formularioContacto" class="border rounded p-4" action="#contacto" method="post">
+                            <!-- Validación: el script pone novalidate y muestra sus propios
+                                 mensajes en los div.invalid-feedback. Sin JavaScript valida el
+                                 navegador con required, type, pattern y minlength. -->
 
                             <p class="small text-body-secondary">
                                 Los campos marcados con asterisco <span aria-hidden="true">(*)</span> son obligatorios.
@@ -411,17 +324,24 @@
                                     <div class="col-md-6">
                                         <label class="form-label" for="nombre">Nombre completo <span aria-hidden="true">*</span></label>
                                         <input class="form-control" type="text" id="nombre" name="nombre"
-                                               autocomplete="name" placeholder="Ej: Diego Carvajal" required>
+                                               autocomplete="name" placeholder="Ej: Diego Carvajal" required
+                                               minlength="2" aria-describedby="error-nombre">
+                                        <div id="error-nombre" class="invalid-feedback"></div>
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label" for="correo">Correo electrónico <span aria-hidden="true">*</span></label>
                                         <input class="form-control" type="email" id="correo" name="correo"
-                                               autocomplete="email" placeholder="tucorreo@ejemplo.cl" required>
+                                               autocomplete="email" placeholder="tucorreo@ejemplo.cl" required
+                                               pattern="[^@\s]+@[^@\s]+\.[^@\s]{2,}" title="Usa la forma nombre@dominio.cl"
+                                               aria-describedby="error-correo">
+                                        <div id="error-correo" class="invalid-feedback"></div>
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label" for="telefono">Teléfono</label>
                                         <input class="form-control" type="tel" id="telefono" name="telefono"
-                                               autocomplete="tel" placeholder="+56 9 1234 5678">
+                                               autocomplete="tel" placeholder="+56 9 1234 5678"
+                                               aria-describedby="error-telefono">
+                                        <div id="error-telefono" class="invalid-feedback"></div>
                                     </div>
                                 </div>
                             </fieldset>
@@ -433,14 +353,8 @@
                                         <label class="form-label" for="juego">Juego de interés</label>
                                         <input class="form-control" type="text" id="juego" name="juego"
                                                list="catalogoJuegos" placeholder="Escribe o elige un título">
-                                        <datalist id="catalogoJuegos">
-                                            <option value="Marvel's Spider-Man 2"></option>
-                                            <option value="God of War Ragnarök"></option>
-                                            <option value="Ghost of Yōtei"></option>
-                                            <option value="Gran Turismo 7"></option>
-                                            <option value="Astro Bot"></option>
-                                            <option value="Horizon Forbidden West"></option>
-                                        </datalist>
+                                        <!-- Sugerencias: el script agrega una opción por juego del catálogo -->
+                                        <datalist id="catalogoJuegos"></datalist>
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label" for="motivo">Motivo del contacto</label>
@@ -469,7 +383,9 @@
                                     <div class="col-12">
                                         <label class="form-label" for="mensaje">Mensaje <span aria-hidden="true">*</span></label>
                                         <textarea class="form-control" id="mensaje" name="mensaje" rows="5"
-                                                  placeholder="Cuéntanos en qué te podemos ayudar" required></textarea>
+                                                  placeholder="Cuéntanos en qué te podemos ayudar" required
+                                                  minlength="10" aria-describedby="error-mensaje"></textarea>
+                                        <div id="error-mensaje" class="invalid-feedback"></div>
                                     </div>
                                     <div class="col-12">
                                         <div class="form-check">
@@ -490,6 +406,9 @@
                             </div>
 
                         </form>
+
+                        <!-- Resumen de la consulta: lo crea el script tras un envío válido -->
+                        <div id="mensajeFormulario" role="status"></div>
                     </div>
 
                 </div>
@@ -534,97 +453,12 @@
             integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
             crossorigin="anonymous"></script>
 
-    <!-- Ajustes al carrusel de Bootstrap:
-         1) Alto estable, para que la página no salte al cambiar de diapositiva.
-         2) Rotación detenible. Bootstrap solo la detiene con el mouse encima; quien
-            navega con teclado o lector de pantalla también necesita poder pararla
-            (WCAG 2.2.2), y el enlace que tiene enfocado no debe desaparecer al
-            cambiar la diapositiva. Se detiene con el botón Pausar y mientras el
-            foco del teclado esté dentro del carrusel. -->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const elemento = document.getElementById('carruselDestacados');
-            const boton = document.getElementById('botonPausa');
-            if (!elemento || !boton || !window.bootstrap) return;
-
-            // 1) Alto estable. Cada diapositiva mide distinto según cuántas líneas
-            // ocupe su descripción en ese ancho de pantalla. El contenedor toma el
-            // alto de la más alta y se recalcula cuando carga la tipografía y cuando
-            // cambia el tamaño de la ventana.
-            const interior = elemento.querySelector('.carousel-inner');
-            const igualarAlto = () => {
-                interior.style.minHeight = '';
-                const altos = [...interior.children].map((item) => {
-                    const oculta = !item.classList.contains('active');
-                    if (oculta) item.style.display = 'block';
-                    const alto = item.offsetHeight;
-                    if (oculta) item.style.display = '';
-                    return alto;
-                });
-                interior.style.minHeight = `${Math.max(...altos)}px`;
-            };
-            igualarAlto();
-            document.fonts.ready.then(igualarAlto);
-            window.addEventListener('resize', igualarAlto);
-
-            // 2) Rotación detenible. El carrusel avanza solo si nadie lo pausó y el
-            // foco no está dentro. Quien pidió reducir el movimiento empieza en pausa.
-            let pausado = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-            let focoDentro = false;
-            let aplicado = null;
-
-            // Recrea el carrusel con ride 'carousel' (avanza solo) o false (queda
-            // quieto: ni el mouse ni las flechas lo vuelven a poner en marcha).
-            // Solo actúa cuando el estado cambia.
-            const aplicar = () => {
-                const automatico = !pausado && !focoDentro;
-                if (automatico === aplicado) return;
-
-                // Recrearlo a mitad de un cambio de diapositiva dejaría dos activas
-                // a la vez: se espera a que Bootstrap termine la transición.
-                if (elemento.querySelector('.carousel-item-next, .carousel-item-prev')) {
-                    elemento.addEventListener('slid.bs.carousel', aplicar, { once: true });
-                    return;
-                }
-
-                const anterior = bootstrap.Carousel.getInstance(elemento);
-                if (anterior) {
-                    // dispose() no detiene los temporizadores de la instancia: se
-                    // detienen antes, para que no queden corriendo sobre ella.
-                    anterior.pause();
-                    clearTimeout(anterior.touchTimeout);
-                    anterior.dispose();
-                }
-                new bootstrap.Carousel(elemento, { ride: automatico ? 'carousel' : false });
-                aplicado = automatico;
-            };
-
-            // Pausa mientras el foco del teclado está dentro del carrusel
-            elemento.addEventListener('focusin', () => {
-                focoDentro = true;
-                aplicar();
-            });
-            elemento.addEventListener('focusout', (evento) => {
-                if (elemento.contains(evento.relatedTarget)) return;
-                focoDentro = false;
-                aplicar();
-            });
-
-            const actualizarBoton = () => {
-                boton.textContent = pausado ? 'Reanudar' : 'Pausar';
-            };
-
-            aplicar();
-            actualizarBoton();
-            boton.hidden = false;
-
-            boton.addEventListener('click', () => {
-                pausado = !pausado;
-                aplicar();
-                actualizarBoton();
-            });
-        });
-    </script>
+    <!-- JavaScript de la Semana 5: catálogo desde data/catalogo.json (Fetch API),
+         filtros, resaltado de tarjetas, validación del formulario, referencia del
+         dólar y el ajuste del carrusel de la Semana 4. Script clásico con defer:
+         corre con el HTML ya leído y después de Bootstrap. No es un módulo, para
+         que el carrusel y el formulario funcionen también al abrirlo con file://. -->
+    <script src="js/Diego_Carvajal_PFY2201_DOM_Semana5.js" defer></script>
 
 </body>
 
