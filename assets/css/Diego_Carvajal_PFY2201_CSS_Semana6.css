@@ -3,7 +3,7 @@
 /* =============================================================================
    PixelPlay Store — Ajustes sobre Bootstrap 5.3.8
    Asignatura : Desarrollo Frontend I (PFY2201)
-   Actividad  : Exp 2 · Semana 5 — "Manipulando el DOM con JavaScript para mejorar la interactividad"
+   Actividad  : Exp 2 · Semana 6 — "Optimizando la lógica y rendimiento de una página web con JavaScript"
    Autor      : Diego Carvajal
 
    Esta hoja no reemplaza a Bootstrap ni reconstruye nada que Bootstrap ya
@@ -19,7 +19,9 @@
 
    Desde la Semana 5 también da estilo a los estados que agrega JavaScript: la
    tarjeta resaltada con el puntero o el teclado, los errores del formulario y
-   el foco en los elementos a los que el script lleva el foco.
+   el foco en los elementos a los que el script lleva el foco. Desde la Semana 6
+   también fija la barra de navegación, da color al menú de categorías y fija
+   el panel del carrito en escritorio.
 
    Contenido:
      1. Variables globales de Bootstrap
@@ -29,6 +31,8 @@
      5. Catálogo dinámico
      6. Validación del formulario
      7. Foco en destinos del script
+     8. Barra fija y menú de categorías
+     9. Carrito y modal
    ========================================================================== */
 
 
@@ -210,12 +214,135 @@ textarea.form-control.is-invalid {
 
 /* =============================================================================
    7. FOCO EN DESTINOS DEL SCRIPT
-   El título del catálogo recibe el foco desde JavaScript al pulsar Reintentar
-   (tabindex="-1"). Bootstrap 5.3.8 no trae regla para ese caso: con teclado se
-   dibuja el mismo contorno de acento; tras un clic, :focus-visible no dibuja
-   nada.
+   Los títulos del catálogo y del carrito reciben el foco desde JavaScript
+   (tabindex="-1"): al pulsar Reintentar, al elegir una categoría en la barra y
+   al vaciar, finalizar o quitar el último producto del carrito. Bootstrap 5.3.8
+   no trae regla para ese caso: con teclado se dibuja el mismo contorno de
+   acento; tras un clic, :focus-visible no dibuja nada. Se excluye el modal:
+   Bootstrap le da el foco al abrirlo y el contorno rodearía la pantalla completa.
    ========================================================================== */
-[tabindex="-1"]:focus-visible {
+[tabindex="-1"]:not(.modal):focus-visible {
     outline: 2px solid var(--pp-acento);
     outline-offset: 0.25rem;
+}
+
+
+/* =============================================================================
+   8. BARRA FIJA Y MENÚ DE CATEGORÍAS
+   ========================================================================== */
+
+/* La cabecera queda fija (sticky-top, 71 px de alto). Al saltar a un ancla o al
+   recorrer con Tab, los elementos del contenido y del pie dejan este margen
+   arriba para que la barra no los tape (WCAG 2.4.11). Va como scroll-margin en
+   ellos y no como scroll-padding en html: con scroll-padding, Chrome desplaza
+   la página al enfocar un control de la propia barra fija. */
+main,
+main *,
+footer * {
+    scroll-margin-top: 5rem;
+}
+
+/* El enlace para saltar al contenido debe quedar sobre la barra fija, que usa
+   z-index 1020 (sticky-top). */
+.enlace-saltar {
+    z-index: 1030;
+}
+
+/* En teléfonos angostos el logotipo se achica, y se reducen el espacio que lo
+   sigue y el relleno lateral de la hamburguesa (variables de Bootstrap), para
+   que logotipo, Carrito y hamburguesa quepan en una sola fila a 320 px, aun si
+   el navegador muestra una barra de desplazamiento. */
+@media (max-width: 399.98px) {
+    .navbar {
+        --bs-navbar-brand-margin-end: 0.5rem;
+        --bs-navbar-toggler-padding-x: 0.5rem;
+    }
+
+    .navbar-brand img {
+        width: 112px;
+        height: auto;
+    }
+}
+
+/* Bootstrap pinta de azul #0d6efd el ítem activo o presionado del menú
+   desplegable: se usa el acento. El foco del teclado se dibuja por dentro,
+   porque el gris de hover no basta para distinguirlo. */
+.dropdown-menu {
+    --bs-dropdown-link-active-bg: var(--pp-acento);
+    --bs-dropdown-link-active-color: #fff;
+}
+
+.dropdown-item:focus-visible {
+    outline: 2px solid var(--pp-acento);
+    outline-offset: -2px;
+}
+
+/* En el ítem activo el fondo ya es el acento: el contorno del foco va en blanco
+   y un poco más adentro, para que se distinga. */
+.dropdown-item.active:focus-visible {
+    outline-color: #fff;
+    outline-offset: -4px;
+}
+
+/* Bajo lg el menú desplegado tiene scroll propio (navbar-nav-scroll), que
+   recortaría el anillo de foco exterior de los enlaces: se dibuja por dentro. */
+@media (max-width: 991.98px) {
+    .navbar .nav-link:focus-visible {
+        box-shadow: inset 0 0 0 2px var(--pp-acento);
+    }
+}
+
+
+/* =============================================================================
+   9. CARRITO Y MODAL
+   ========================================================================== */
+
+/* Desde lg el resumen del carrito acompaña el scroll bajo la barra fija, con un
+   alto máximo. Solo la lista de productos tiene scroll propio: el título, el
+   estado, los totales y los botones Finalizar y Vaciar quedan siempre a la
+   vista aunque haya muchas filas en pantallas bajas. El relleno lateral de la
+   lista deja espacio al anillo de foco de −, + y Quitar. */
+@media (min-width: 992px) {
+    .panel-carrito {
+        position: sticky;
+        top: 5rem;
+        max-height: calc(100vh - 6rem);
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .panel-carrito #listaCarrito {
+        flex: 0 1 auto;
+        min-height: 0;
+        overflow-y: auto;
+        margin-inline: -0.25rem;
+        padding-inline: 0.25rem;
+    }
+
+    /* El panel ya queda fijo bajo la barra: sus controles no necesitan el margen
+       de la sección 8 (en la lista con scroll propio la haría saltar). */
+    .panel-carrito * {
+        scroll-margin-top: 0;
+    }
+}
+
+/* − y + en su límite: siguen enfocables (aria-disabled, no disabled) para no
+   perder el foco y para explicar el motivo al pulsarlos. Se atenúan como los
+   botones desactivados de Bootstrap. */
+.btn[aria-disabled="true"] {
+    opacity: 0.65;
+    cursor: not-allowed;
+}
+
+/* Foco de la X del modal con el acento en lugar del azul de Bootstrap. */
+.btn-close {
+    --bs-btn-close-focus-shadow: 0 0 0 0.25rem rgba(var(--pp-acento-rgb), 0.5);
+}
+
+/* Anillo de foco de los botones oscuros y de los grises con el acento al 50 %:
+   el gris que trae Bootstrap queda bajo 3:1 sobre blanco (WCAG 1.4.11). */
+.btn-dark,
+.btn-outline-secondary {
+    --bs-btn-focus-shadow-rgb: var(--pp-acento-rgb);
 }

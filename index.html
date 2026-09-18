@@ -20,44 +20,85 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;display=swap">
 
     <!-- Hoja propia: ajusta variables de Bootstrap y agrega unas pocas reglas
-         (foco, menú activo, carrusel, tarjeta resaltada y errores del formulario).
-         Va después de bootstrap.min.css para que, a igual especificidad, sus
-         valores prevalezcan. -->
-    <link rel="stylesheet" href="css/Diego_Carvajal_PFY2201_CSS_Semana5.css">
+         (foco, menú activo, barra fija, menú de categorías, carrusel, tarjeta
+         resaltada, carrito y errores del formulario). Va después de
+         bootstrap.min.css para que, a igual especificidad, sus valores prevalezcan. -->
+    <link rel="stylesheet" href="assets/css/Diego_Carvajal_PFY2201_CSS_Semana6.css">
+
+    <!-- Sin JavaScript: el menú colapsado no se podría abrir y «Categorías» no
+         haría nada. Se muestra el menú completo y se ocultan esos dos controles.
+         Bajo lg la cabecera deja de ser fija: con el menú desplegado mediría más
+         de 200 px y taparía los títulos a los que llevan los enlaces. -->
+    <noscript>
+        <style>
+            #menuPrincipal { display: block; }
+            .navbar-toggler, .nav-item.dropdown { display: none; }
+            @media (max-width: 991.98px) { header.sticky-top { position: static; } }
+        </style>
+    </noscript>
 </head>
 
 <body>
 
     <!-- Enlace para saltar al contenido: invisible hasta que recibe el foco
          del teclado, para no obligar a recorrer todo el menú -->
-    <a class="visually-hidden-focusable position-absolute top-0 start-0 m-2 px-3 py-2 bg-dark text-white z-3"
+    <a class="visually-hidden-focusable position-absolute top-0 start-0 m-2 px-3 py-2 bg-dark text-white enlace-saltar"
        href="#contenido">Saltar al contenido principal</a>
 
     <!-- =====================================================================
-         CABECERA Y BARRA DE NAVEGACIÓN (componente navbar)
-         navbar-expand-lg: el menú se muestra completo desde 992 px; por
-         debajo se colapsa detrás del botón hamburguesa.
+         CABECERA Y BARRA DE NAVEGACIÓN (componentes navbar y dropdown)
+         La cabecera queda fija arriba al hacer scroll (sticky-top en el header,
+         no en el nav: dentro de un header de su misma altura el nav no se
+         quedaría pegado). navbar-expand-lg: menú completo desde 992 px; por
+         debajo se colapsa tras el botón hamburguesa. El enlace Carrito y la
+         hamburguesa van fuera del colapso: el contador se ve siempre, también
+         en móvil.
          ================================================================== -->
-    <header>
-        <nav class="navbar navbar-expand-lg bg-body border-bottom" aria-label="Menú principal">
+    <header class="sticky-top">
+        <nav id="barraNavegacion" class="navbar navbar-expand-lg bg-body border-bottom" aria-label="Menú principal">
             <div class="container">
 
                 <a class="navbar-brand" href="#inicio">
-                    <img class="d-block" src="img/logo-pixelplay-mono.svg"
+                    <img class="d-block" src="assets/img/logo-pixelplay-mono.svg"
                          alt="PixelPlay Store" width="146" height="44">
                 </a>
 
-                <!-- Botón hamburguesa: abre y cierra el menú en pantallas pequeñas -->
-                <button class="navbar-toggler" type="button"
-                        data-bs-toggle="collapse" data-bs-target="#menuPrincipal"
-                        aria-controls="menuPrincipal" aria-expanded="false"
-                        aria-label="Abrir o cerrar el menú">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+                <!-- Carrito y botón hamburguesa: a la derecha del logotipo en móvil;
+                     desde lg, order-lg-last los lleva al final de la barra -->
+                <div class="d-flex align-items-center gap-2 ms-auto order-lg-last ms-lg-3">
+                    <!-- Oculto hasta que el script lo activa; el contador aparece cuando
+                         el carrito se valida contra el catálogo -->
+                    <a id="enlaceCarrito" class="btn btn-outline-dark btn-sm" href="#carrito" hidden>Carrito <span id="contadorCarrito" class="badge text-bg-light border fw-normal" hidden><span id="cantidadCarrito">0</span><span id="textoContador" class="visually-hidden"> productos</span></span></a>
+
+                    <button class="navbar-toggler" type="button"
+                            data-bs-toggle="collapse" data-bs-target="#menuPrincipal"
+                            aria-controls="menuPrincipal" aria-expanded="false"
+                            aria-label="Abrir o cerrar el menú">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                </div>
 
                 <div class="collapse navbar-collapse" id="menuPrincipal">
-                    <ul class="navbar-nav ms-auto">
+                    <!-- navbar-nav-scroll: bajo lg limita el menú al 75 % del alto de la
+                         pantalla, con scroll propio (teléfonos en horizontal) -->
+                    <ul class="navbar-nav navbar-nav-scroll ms-auto">
                         <li class="nav-item"><a class="nav-link active" aria-current="page" href="#inicio">Inicio</a></li>
+                        <!-- Categorías simuladas: escritas aquí para que la barra las muestre
+                             aunque el catálogo no cargue; el script las conecta con los filtros.
+                             Es un button (no un enlace) para que abra con Enter y con Espacio. -->
+                        <li class="nav-item dropdown">
+                            <button class="nav-link dropdown-toggle" type="button"
+                                    data-bs-toggle="dropdown" aria-expanded="false">Categorías</button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#catalogo" data-categoria="Todas">Todas las categorías</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="#catalogo" data-categoria="Acción y aventura">Acción y aventura</a></li>
+                                <li><a class="dropdown-item" href="#catalogo" data-categoria="Rol (RPG)">Rol (RPG)</a></li>
+                                <li><a class="dropdown-item" href="#catalogo" data-categoria="Carreras y simulación">Carreras y simulación</a></li>
+                                <li><a class="dropdown-item" href="#catalogo" data-categoria="Plataformas">Plataformas</a></li>
+                                <li><a class="dropdown-item" href="#catalogo" data-categoria="Consolas y accesorios">Consolas y accesorios</a></li>
+                            </ul>
+                        </li>
                         <li class="nav-item"><a class="nav-link" href="#destacados">Destacados</a></li>
                         <li class="nav-item"><a class="nav-link" href="#catalogo">Catálogo</a></li>
                         <li class="nav-item"><a class="nav-link" href="#contacto">Contacto</a></li>
@@ -100,9 +141,9 @@
              DESTACADOS (componente carousel)
              data-bs-ride="carousel": arranque automático al cargar la página.
              data-bs-interval="3000" en cada diapositiva: cambia cada 3 s.
-             iniciarCarrusel(), en js/Diego_Carvajal_PFY2201_DOM_Semana5.js, recrea
-             el carrusel cambiando esa opción: false para detenerlo (botón Pausar
-             y foco del teclado) y 'carousel' para reanudarlo.
+             iniciarCarrusel(), en assets/js/Diego_Carvajal_PFY2201_Optimizacion_Semana6.js,
+             recrea el carrusel cambiando esa opción: false para detenerlo (botón
+             Pausar y foco del teclado) y 'carousel' para reanudarlo.
              ============================================================== -->
         <section id="destacados" class="destacados py-5 border-bottom" aria-labelledby="titulo-destacados">
             <div class="container">
@@ -133,8 +174,8 @@
                             <div class="px-5 pt-4 pb-5">
                                 <div class="row g-4 align-items-center">
                                     <div class="col-8 col-sm-6 col-md-5 mx-auto">
-                                        <img class="d-block w-100 h-auto rounded" src="img/juego-ghost-of-yotei.jpg"
-                                             alt="Portada del videojuego Ghost of Yōtei" width="1024" height="1024">
+                                        <img class="d-block w-100 h-auto rounded" src="assets/img/juego-ghost-of-yotei.jpg"
+                                             alt="Portada del videojuego Ghost of Yōtei" width="800" height="800">
                                     </div>
                                     <div class="col-md-7">
                                         <p class="small text-uppercase fw-semibold text-body-secondary mb-2">Acción y aventura</p>
@@ -144,7 +185,7 @@
                                             Desarrollado por Sucker Punch Productions.
                                         </p>
                                         <p class="fs-5 fw-semibold">$69.990</p>
-                                        <a class="btn btn-dark" href="#contacto" data-juego="Ghost of Yōtei"
+                                        <a class="btn btn-outline-dark" href="#contacto" data-juego="Ghost of Yōtei"
                                            aria-label="Consultar por Ghost of Yōtei">Consultar</a>
                                     </div>
                                 </div>
@@ -156,8 +197,8 @@
                             <div class="px-5 pt-4 pb-5">
                                 <div class="row g-4 align-items-center">
                                     <div class="col-8 col-sm-6 col-md-5 mx-auto">
-                                        <img class="d-block w-100 h-auto rounded" src="img/juego-astro-bot.jpg"
-                                             alt="Portada del videojuego Astro Bot" width="1024" height="1024">
+                                        <img class="d-block w-100 h-auto rounded" src="assets/img/juego-astro-bot.jpg"
+                                             alt="Portada del videojuego Astro Bot" width="800" height="800">
                                     </div>
                                     <div class="col-md-7">
                                         <p class="small text-uppercase fw-semibold text-body-secondary mb-2">Plataformas</p>
@@ -167,7 +208,7 @@
                                             Desarrollado por Team Asobi.
                                         </p>
                                         <p class="fs-5 fw-semibold">$54.990</p>
-                                        <a class="btn btn-dark" href="#contacto" data-juego="Astro Bot"
+                                        <a class="btn btn-outline-dark" href="#contacto" data-juego="Astro Bot"
                                            aria-label="Consultar por Astro Bot">Consultar</a>
                                     </div>
                                 </div>
@@ -179,8 +220,8 @@
                             <div class="px-5 pt-4 pb-5">
                                 <div class="row g-4 align-items-center">
                                     <div class="col-8 col-sm-6 col-md-5 mx-auto">
-                                        <img class="d-block w-100 h-auto rounded" src="img/juego-spider-man-2.jpg"
-                                             alt="Portada del videojuego Marvel's Spider-Man 2" width="1024" height="1024">
+                                        <img class="d-block w-100 h-auto rounded" src="assets/img/juego-spider-man-2.jpg"
+                                             alt="Portada del videojuego Marvel's Spider-Man 2" width="800" height="800">
                                     </div>
                                     <div class="col-md-7">
                                         <p class="small text-uppercase fw-semibold text-body-secondary mb-2">Acción y aventura</p>
@@ -190,7 +231,7 @@
                                             Desarrollado por Insomniac Games.
                                         </p>
                                         <p class="fs-5 fw-semibold">$59.990</p>
-                                        <a class="btn btn-dark" href="#contacto" data-juego="Marvel's Spider-Man 2"
+                                        <a class="btn btn-outline-dark" href="#contacto" data-juego="Marvel's Spider-Man 2"
                                            aria-label="Consultar por Marvel's Spider-Man 2">Consultar</a>
                                     </div>
                                 </div>
@@ -216,54 +257,57 @@
         </section>
 
         <!-- =================================================================
-             CATÁLOGO (sistema de cuadrículas + componente card)
-             Fila de 12 columnas: barra lateral de 3 y productos de 9 desde lg.
-             Los filtros y las tarjetas los construye el script con los datos de
-             data/catalogo.json (Fetch API).
+             CATÁLOGO Y CARRITO (cuadrícula + componentes card, input group,
+             list group y modal)
+             Fila de 12 columnas: productos de 8 y resumen del carrito de 4 desde
+             lg; en móvil y tablet el carrito queda bajo las tarjetas. Los filtros y
+             las tarjetas los construye el script con los datos de
+             assets/js/productos.json (Fetch API); la búsqueda está escrita aquí y el
+             script la muestra cuando el catálogo carga.
              ============================================================== -->
         <section id="catalogo" class="py-5 border-bottom" aria-labelledby="titulo-catalogo">
             <div class="container">
 
-                <!-- tabindex="-1": el script le da el foco al pulsar Reintentar -->
+                <!-- tabindex="-1": el script le da el foco al pulsar Reintentar y al
+                     elegir una categoría en la barra -->
                 <h2 id="titulo-catalogo" class="h3" tabindex="-1">Catálogo</h2>
-                <p class="text-body-secondary mb-4">Los títulos más vendidos de la semana en nuestra tienda.</p>
+                <p class="text-body-secondary mb-4">Busca por nombre, filtra por categoría y arma tu pedido.</p>
 
                 <div class="row g-4">
 
-                    <!-- Barra lateral: 12 columnas en móvil y tablet, 3 desde lg -->
-                    <aside class="col-lg-3" aria-labelledby="titulo-categorias">
+                    <!-- Productos: 12 columnas en móvil y tablet, 8 desde lg -->
+                    <div class="col-lg-8">
 
-                        <!-- Filtros: el script crea un botón por categoría con los datos
-                             del JSON y quita hidden; sin JavaScript no servirían -->
+                        <!-- Búsqueda (evento submit). Oculta hasta que el catálogo carga:
+                             sin JavaScript no haría nada -->
+                        <form id="formularioBusqueda" class="mb-3" role="search" action="#catalogo" hidden>
+                            <label class="form-label" for="campoBusqueda">Buscar en el catálogo</label>
+                            <div class="input-group">
+                                <input class="form-control" type="search" id="campoBusqueda" name="busqueda"
+                                       maxlength="60" autocomplete="off"
+                                       placeholder="Ej: Astro, carreras o Insomniac"
+                                       aria-describedby="ayudaBusqueda">
+                                <button class="btn btn-dark" type="submit">Buscar</button>
+                                <button class="btn btn-outline-secondary" type="reset">Limpiar</button>
+                            </div>
+                            <p id="ayudaBusqueda" class="form-text mb-0">Busca por nombre, categoría o estudio. No importan las tildes ni las mayúsculas.</p>
+                        </form>
+
+                        <!-- Filtros: el script crea un botón por categoría con los datos del JSON -->
                         <div id="bloqueFiltros" hidden>
-                            <h3 id="titulo-categorias" class="small text-uppercase fw-semibold mb-3">Categorías</h3>
-                            <!-- Utilidades flex: botones en fila en móvil, columna desde lg -->
-                            <ul id="filtrosCategorias" class="list-unstyled d-flex flex-wrap flex-lg-column align-items-lg-start gap-2 mb-4"></ul>
+                            <h3 id="titulo-categorias" class="small text-uppercase fw-semibold mb-2">Categorías</h3>
+                            <ul id="filtrosCategorias" class="list-unstyled d-flex flex-wrap gap-2 mb-3"></ul>
                         </div>
 
-                        <h3 class="small text-uppercase fw-semibold mb-2">Envío</h3>
-                        <ul class="list-group list-group-flush small">
-                            <li class="list-group-item bg-transparent px-0">Retiro en tienda sin costo</li>
-                            <li class="list-group-item bg-transparent px-0">Despacho a todo Chile</li>
-                            <li class="list-group-item bg-transparent px-0">Garantía oficial de 12 meses</li>
-                        </ul>
-
-                    </aside>
-
-                    <!-- Productos: 12 columnas en móvil y tablet, 9 desde lg -->
-                    <div class="col-lg-9">
-
-                        <!-- Estado de la carga. El indicador gira mientras llega el JSON;
-                             el texto (role="status") lo leen los lectores de pantalla:
-                             cargando, cantidad de juegos mostrados o error -->
+                        <!-- Estado de la carga y de la vista. role="status": los lectores de
+                             pantalla anuncian cargando, cantidad mostrada, resultados o error -->
                         <div class="d-flex align-items-center gap-2 mb-3">
                             <span id="indicadorCarga" class="spinner-border spinner-border-sm text-body-secondary" hidden></span>
-                            <p id="resumenCatalogo" class="small text-body-secondary mb-0" role="status"></p>
+                            <p id="resumenCatalogo" class="small text-body-secondary text-break mb-0" role="status"></p>
                         </div>
 
-                        <!-- Avisos de error y de categoría vacía. El párrafo de respaldo se
-                             ve si JavaScript no corre o el archivo .js no carga; el script
-                             lo elimina al empezar -->
+                        <!-- Avisos (error, sin resultados, categoría vacía). El párrafo de
+                             respaldo se ve si JavaScript no corre; el script lo elimina -->
                         <div id="estadoCatalogo">
                             <p class="text-body-secondary">
                                 El catálogo se carga con JavaScript. Si no aparece, escríbenos desde el
@@ -271,13 +315,57 @@
                             </p>
                         </div>
 
-                        <!-- Tarjetas creadas por el script: 1 por fila en móvil, 2 desde md y 3 desde xl -->
-                        <div id="listaJuegos" class="row g-4"></div>
+                        <!-- Solo con file://: explica que el catálogo vino de la copia publicada -->
+                        <p id="notaOrigen" class="small text-body-secondary mb-3" hidden></p>
+
+                        <!-- Tarjetas creadas por el script: 1 por fila en móvil, 2 desde sm y 3 desde xxl -->
+                        <div id="listaProductos" class="row g-4"></div>
 
                         <!-- Referencia del dólar (mindicador.cl): oculta hasta que responde -->
                         <p id="referenciaDolar" class="small text-body-secondary mt-4 mb-0" hidden></p>
 
                     </div>
+
+                    <!-- Área designada del carrito: 12 columnas en móvil y tablet, 4 desde
+                         lg. Desde lg el panel queda fijo al hacer scroll (hoja propia) -->
+                    <aside id="carrito" class="col-lg-4" aria-labelledby="titulo-carrito">
+                        <div class="panel-carrito border rounded p-3 bg-body">
+
+                            <!-- tabindex="-1": destino del foco al vaciar, finalizar, quitar el
+                                 último producto o pulsar Carrito en la barra -->
+                            <h3 id="titulo-carrito" class="h5" tabindex="-1">Resumen del carrito</h3>
+
+                            <!-- Respaldo sin JavaScript: el script lo elimina al iniciar -->
+                            <p id="respaldoCarrito" class="small text-body-secondary mb-0">
+                                El carrito funciona con JavaScript. Mientras tanto, escríbenos desde el
+                                <a href="#contacto">formulario de contacto</a>.
+                            </p>
+
+                            <!-- Última acción y totales, visible y anunciado (role="status") -->
+                            <p id="estadoCarrito" class="small text-body-secondary mb-2" role="status"></p>
+
+                            <!-- Una fila por producto; las crea y actualiza el script -->
+                            <ul id="listaCarrito" class="list-group list-group-flush" aria-label="Productos en el carrito"></ul>
+
+                            <!-- Totales y acciones: ocultos hasta que carga el catálogo -->
+                            <div id="controlesCarrito" hidden>
+                                <p class="d-flex justify-content-between border-top pt-3 mb-1">
+                                    <span>Productos</span><span id="unidadesCarrito">0</span>
+                                </p>
+                                <p class="d-flex justify-content-between fw-semibold fs-5 mb-3">
+                                    <span>Total</span><span id="totalCarrito">$0</span>
+                                </p>
+                                <div class="d-grid gap-2">
+                                    <button id="botonFinalizar" class="btn btn-dark" type="button" disabled>Finalizar compra</button>
+                                    <button id="botonVaciar" class="btn btn-outline-secondary" type="button" disabled>Vaciar carrito</button>
+                                </div>
+                            </div>
+
+                            <!-- Aviso del pedido simulado tras Finalizar compra -->
+                            <div id="mensajeCarrito"></div>
+
+                        </div>
+                    </aside>
 
                 </div>
             </div>
@@ -304,6 +392,12 @@
                             <a href="mailto:contacto@pixelplay.cl">contacto@pixelplay.cl</a>
                         </address>
                         <p class="small text-body-secondary mt-3 mb-0">Lunes a viernes, 10:00 a 19:00</p>
+                        <h3 class="small text-uppercase fw-semibold mt-4 mb-2">Envío</h3>
+                        <ul class="list-group list-group-flush small">
+                            <li class="list-group-item bg-transparent px-0">Retiro en tienda sin costo</li>
+                            <li class="list-group-item bg-transparent px-0">Despacho a todo Chile</li>
+                            <li class="list-group-item bg-transparent px-0">Garantía oficial de 12 meses</li>
+                        </ul>
                     </div>
 
                     <!-- Formulario: 8 columnas desde lg -->
@@ -438,7 +532,7 @@
                 </div>
                 <div class="col-sm-6 col-lg-4">
                     <h2 class="small text-uppercase fw-semibold mb-2">Atención</h2>
-                    <p class="small text-body-secondary mb-0">Lunes a viernes, 10:00 a 19:00<br>+56 2 2345 6789</p>
+                    <p class="small text-body-secondary mb-0">Lunes a viernes, 10:00 a 19:00<br><a href="tel:+56223456789">+56 2 2345 6789</a><br><a href="mailto:contacto@pixelplay.cl">contacto@pixelplay.cl</a></p>
                 </div>
             </div>
 
@@ -447,18 +541,44 @@
         </div>
     </footer>
 
-    <!-- Bootstrap 5.3.8 con Popper incluido: hace funcionar el colapso del
-         menú y el carrusel. Va al final para no retrasar el dibujo de la página. -->
+    <!-- =====================================================================
+         MODAL DE DETALLE (componente modal): uno solo para todos los productos.
+         El script lo llena al abrirse (show.bs.modal) con el producto del botón
+         «Ver detalle» que lo abrió. Sin la clase fade: se abre sin animación.
+         aria-labelledby lo pone el script al abrir y lo quita al cerrar: fijo en
+         un div sin role no es válido, y Bootstrap quita role="dialog" al cerrar.
+         ================================================================== -->
+    <div class="modal" id="modalProducto" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 id="tituloModalProducto" class="modal-title h5">Detalle del producto</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <!-- Cuerpo vacío: la imagen la crea el script (un img sin src no es válido) -->
+                <div id="cuerpoModalProducto" class="modal-body"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button id="botonAgregarModal" type="button" class="btn btn-dark" data-agregar="">Agregar al carrito</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5.3.8 con Popper incluido: hace funcionar el colapso del menú,
+         el menú desplegable de categorías (usa Popper también dentro de la barra),
+         el modal de detalle y el carrusel. Va al final para no retrasar el dibujo
+         de la página. -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
             crossorigin="anonymous"></script>
 
-    <!-- JavaScript de la Semana 5: catálogo desde data/catalogo.json (Fetch API),
-         filtros, resaltado de tarjetas, validación del formulario, referencia del
-         dólar y el ajuste del carrusel de la Semana 4. Script clásico con defer:
-         corre con el HTML ya leído y después de Bootstrap. No es un módulo, para
-         que el carrusel y el formulario funcionen también al abrirlo con file://. -->
-    <script src="js/Diego_Carvajal_PFY2201_DOM_Semana5.js" defer></script>
+    <!-- JavaScript de la Semana 6: catálogo desde assets/js/productos.json (Fetch
+         API), búsqueda, filtros, categorías de la barra, carrito, modal de detalle,
+         validación del formulario, referencia del dólar y el carrusel de la
+         Semana 4. Script clásico con defer: corre con el HTML ya leído y después de
+         Bootstrap. No es un módulo, para que funcione también al abrirlo con file://. -->
+    <script src="assets/js/Diego_Carvajal_PFY2201_Optimizacion_Semana6.js" defer></script>
 
 </body>
 
