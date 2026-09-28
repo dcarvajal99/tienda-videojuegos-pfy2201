@@ -1,0 +1,85 @@
+/* PixelPlay Store en React · Diego Carvajal · PFY2201 Semana 7
+   Hoja de estilos propia: solo ajusta lo que Bootstrap no cubre y mantiene la
+   misma paleta sobria del sitio de las semanas anteriores. */
+
+/* 1. Paleta y tipografía */
+:root {
+    --pp-blanco: #ffffff;
+    --pp-gris-claro: #f7f7f8;
+    --pp-borde: #e4e4e7;
+    --pp-gris: #52525b;
+    --pp-tinta: #18181b;
+    --pp-acento: #2d1b69;
+    --pp-acento-rgb: 45, 27, 105;
+
+    --bs-body-font-family: 'Inter', system-ui, sans-serif;
+    --bs-body-color: var(--pp-tinta);
+    --bs-body-bg: var(--pp-gris-claro);
+    --bs-border-color: var(--pp-borde);
+    --bs-secondary-color: var(--pp-gris);
+    --bs-link-color: var(--pp-acento);
+    --bs-link-hover-color: var(--pp-acento);
+    --bs-dark: var(--pp-tinta);
+    --bs-dark-rgb: 24, 24, 27;
+}
+
+/* 2. Estructura */
+body {
+    min-height: 100vh;
+}
+
+.card {
+    --bs-card-bg: var(--pp-blanco);
+    --bs-card-border-color: var(--pp-borde);
+}
+
+footer {
+    background-color: var(--pp-blanco);
+}
+
+/* 3. Marca y catálogo */
+.logo {
+    height: 2.25rem;
+    width: auto;
+}
+
+.portada {
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+}
+
+.precio-oferta {
+    color: var(--pp-acento);
+}
+
+.miniatura {
+    border-radius: .25rem;
+    object-fit: cover;
+}
+
+/* 4. Carrito: se queda a la vista en pantallas grandes */
+@media (min-width: 992px) {
+    .panel-carrito {
+        position: sticky;
+        top: 1.5rem;
+    }
+}
+
+/* 5. Foco visible con contraste suficiente en todos los controles */
+.btn-dark,
+.btn-outline-secondary,
+.btn-light {
+    --bs-btn-focus-shadow-rgb: var(--pp-acento-rgb);
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--pp-acento);
+    box-shadow: 0 0 0 .25rem rgba(var(--pp-acento-rgb), .25);
+}
+
+a:focus-visible,
+button:focus-visible {
+    outline: 2px solid var(--pp-acento);
+    outline-offset: 2px;
+}

@@ -1,12 +1,17 @@
-# PixelPlay Store — Semana 6
+# PixelPlay Store — Semana 7
 
-> **Para revisar:** descomprime el ZIP y abre `index.html`. Con conexión a internet la tienda funciona
-> completa también con doble clic (el catálogo se lee desde la copia publicada). Versión publicada:
-> https://dcarvajal99.github.io/tienda-videojuegos-pfy2201/ · Repositorio:
-> https://github.com/dcarvajal99/tienda-videojuegos-pfy2201
+> **Dos versiones de la misma tienda:**
+> el sitio en HTML, CSS y JavaScript está en la raíz (https://dcarvajal99.github.io/tienda-videojuegos-pfy2201/)
+> y la versión construida con React está en `tienda-react/`
+> (https://dcarvajal99.github.io/tienda-videojuegos-pfy2201/react/).
+> Repositorio: https://github.com/dcarvajal99/tienda-videojuegos-pfy2201
 
-Actividad sumativa «Optimizando la lógica y rendimiento de una página web con JavaScript» de la
-asignatura **Desarrollo Frontend I (PFY2201)**, Duoc UC. Exp 2 — Semana 6.
+Actividad formativa «Construyendo componentes funcionales en React para un eCommerce interactivo» de
+la asignatura **Desarrollo Frontend I (PFY2201)**, Duoc UC. Exp 3 — Semana 7.
+
+La Semana 7 agrega `tienda-react/`: el mismo catálogo rehecho con **React 19 y Vite**, con componentes
+funcionales, `useState`, `useEffect`, props y renderizado condicional. El sitio de las semanas
+anteriores queda intacto y sigue siendo el que se abre en la raíz.
 
 Tienda chilena de videojuegos para PlayStation 5 hecha con **Bootstrap 5.3.8** y **JavaScript**:
 la lista de productos se carga desde un JSON con la Fetch API, se puede buscar y filtrar por
@@ -27,7 +32,16 @@ tienda-videojuegos-pfy2201/
 │   ├── js/Diego_Carvajal_PFY2201_Optimizacion_Semana6.js JavaScript de la página
 │   ├── js/productos.json                                 Categorías y productos (lo lee fetch)
 │   └── img/                                              Logotipos y 6 portadas de 800×800
-├── capturas/                                             17 capturas de la entrega
+├── capturas/                                             17 capturas de la Semana 6
+├── tienda-react/                                         Versión en React (Semana 7)
+│   ├── index.html                                        Página que monta React
+│   ├── public/productos.json                             Catálogo con precio normal y de oferta
+│   ├── public/img/                                       Portadas y logotipo
+│   ├── src/App.jsx                                       Componente raíz: estado y funciones
+│   ├── src/componentes/                                  7 componentes funcionales
+│   ├── src/utilidades/formato.js                         Funciones de formato y cálculo
+│   ├── src/estilos.css                                   Ajustes sobre Bootstrap
+│   └── capturas/                                         13 capturas de la Semana 7
 └── README.md
 ```
 
@@ -51,6 +65,30 @@ estructura `index.html` + `assets/{js,css,img}` que pide la entrega.
 También se conservan el carrusel de destacados (Semana 4), la referencia del dólar desde
 mindicador.cl, el resaltado de tarjetas y el formulario de contacto validado (Semana 5), y un modal
 de Bootstrap con el detalle de cada producto.
+
+## La versión en React (Semana 7)
+
+| Pide la actividad | Cómo se resolvió |
+|---|---|
+| Listado con nombre, precio normal, precio oferta, descripción e imagen | `ListaProductos` recorre el catálogo con `map()` y `TarjetaProducto` muestra los cinco datos; el precio normal aparece tachado junto al de oferta |
+| Agregar y eliminar productos del carrito | `onClick` en «Agregar al carrito», «Quitar una» y «Eliminar», con un tope de 10 unidades por juego |
+| Contador con el total de productos | Insignia en la cabecera y en el panel del carrito, calculada con `reduce()` |
+| Total con la suma de los precios | `reduce()` sobre las líneas del carrito, con el precio de oferta cuando existe |
+| Componentes funcionales y JSX | 8 componentes, uno por archivo, dentro de `src/componentes/` |
+| Props | `App` entrega datos y funciones (`onAgregar`, `onQuitar`, `onEliminar`, `onVaciar`) a sus hijos |
+| `useState` y `useEffect` | 7 estados; un efecto carga `productos.json` al montar y otro refleja el carrito en el título de la pestaña |
+| Renderizado condicional | Carga, error, búsqueda sin resultados, carrito vacío y bloque de precios distinto según haya oferta |
+| Eventos | `onClick` en los botones; `onChange` en el buscador y en el selector de categorías |
+| Código modular y comentado | Componentes de una responsabilidad y funciones reutilizables en `src/utilidades/formato.js` |
+
+Para trabajar en ella:
+
+```bash
+cd tienda-react
+npm install
+npm run dev      # desarrollo
+npm run build    # deja la versión publicable en dist/
+```
 
 ## Optimizaciones medidas
 
@@ -99,9 +137,10 @@ y abre `http://localhost:8000`.
 | 4 | Bootstrap 5 para el diseño responsivo | Navbar colapsable, carrusel, cuadrícula y tarjetas de Bootstrap |
 | 5 | Manipulando el DOM con JavaScript | Catálogo desde JSON con Fetch, filtros, validación del formulario y dólar |
 | 6 | Optimizando la lógica y rendimiento con JavaScript | Carrito, búsqueda, categorías en la barra, modal, estructura `assets/` y optimizaciones medidas |
+| 7 | Componentes funcionales en React | Catálogo y carrito rehechos con React 19 y Vite en `tienda-react/`, publicados en `/react/` |
 
 ```bash
-git log --oneline          # ver los seis commits
+git log --oneline          # ver los siete commits
 git checkout <hash>        # situarse en la entrega de esa semana
 git checkout main          # volver al estado actual
 ```

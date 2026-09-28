@@ -1,0 +1,58 @@
+{
+  "productos": [
+    {
+      "id": "spider-man-2",
+      "nombre": "Marvel's Spider-Man 2",
+      "categoria": "Acción y aventura",
+      "descripcion": "Peter Parker y Miles Morales se enfrentan a Venom en Nueva York.",
+      "precioNormal": 59990,
+      "precioOferta": 50990,
+      "imagen": "img/juego-spider-man-2.jpg"
+    },
+    {
+      "id": "god-of-war-ragnarok",
+      "nombre": "God of War Ragnarök",
+      "categoria": "Acción y aventura",
+      "descripcion": "Kratos y Atreus recorren los nueve reinos ante la llegada del Ragnarök.",
+      "precioNormal": 44990,
+      "precioOferta": null,
+      "imagen": "img/juego-god-of-war-ragnarok.jpg"
+    },
+    {
+      "id": "ghost-of-yotei",
+      "nombre": "Ghost of Yōtei",
+      "categoria": "Acción y aventura",
+      "descripcion": "Mundo abierto ambientado en el Japón de 1603, en las tierras del monte Yōtei.",
+      "precioNormal": 69990,
+      "precioOferta": null,
+      "imagen": "img/juego-ghost-of-yotei.jpg"
+    },
+    {
+      "id": "gran-turismo-7",
+      "nombre": "Gran Turismo 7",
+      "categoria": "Carreras y simulación",
+      "descripcion": "Simulador de carreras con más de 400 vehículos y circuitos reales.",
+      "precioNormal": 49990,
+      "precioOferta": 39990,
+      "imagen": "img/juego-gran-turismo-7.jpg"
+    },
+    {
+      "id": "astro-bot",
+      "nombre": "Astro Bot",
+      "categoria": "Plataformas",
+      "descripcion": "Plataformas en 3D con más de 80 niveles y homenajes a la historia de PlayStation.",
+      "precioNormal": 54990,
+      "precioOferta": null,
+      "imagen": "img/juego-astro-bot.jpg"
+    },
+    {
+      "id": "horizon-forbidden-west",
+      "nombre": "Horizon Forbidden West",
+      "categoria": "Rol (RPG)",
+      "descripcion": "Acción y rol en mundo abierto. Aloy explora el oeste prohibido enfrentando máquinas.",
+      "precioNormal": 39990,
+      "precioOferta": 29990,
+      "imagen": "img/juego-horizon-forbidden-west.jpg"
+    }
+  ]
+}
