@@ -3,15 +3,21 @@
 // - cuántas unidades hay en el carrito: con 0 aparece «Agregar al carrito» y con
 //   1 o más el botón pasa a «En el carrito», junto a otro para quitar una unidad;
 // - si los detalles están abiertos, un estado propio de cada tarjeta.
+// Tras agregar o quitar, el botón queda un instante en pausa: muestra la confirmación
+// y no repite la acción si llega un doble clic.
 import { useState, useRef } from 'react';
 import { formatearPesos, calcularDescuento, resumir } from '../utilidades/formato.js';
 import { CANTIDAD_MAXIMA } from '../hooks/useCarrito.js';
+import { useAccionBreve } from '../hooks/useAccionBreve.js';
 
 function TarjetaProducto({ producto, vista, cantidad, onAgregar, onQuitar }) {
     // Estado local: solo esta tarjeta necesita saber si sus detalles están abiertos.
     const [detallesAbiertos, setDetallesAbiertos] = useState(false);
     // Referencia al botón principal, para devolverle el foco si desaparece el botón «−».
     const botonPrincipal = useRef(null);
+    // Pausas breves después de agregar y de quitar.
+    const [agregando, agregarConPausa] = useAccionBreve(600);
+    const [quitando, quitarConPausa] = useAccionBreve(400);
 
     const descuento = calcularDescuento(producto);
     const enOferta = descuento > 0;
@@ -20,9 +26,25 @@ function TarjetaProducto({ producto, vista, cantidad, onAgregar, onQuitar }) {
         ? 'Agregar al carrito'
         : 'En el carrito (' + cantidad + ') · ' + (cantidad >= CANTIDAD_MAXIMA ? 'Máximo' : 'Agregar otra');
 
+    // Clase del botón principal: confirmación durante la pausa, borde si ya está en el carrito.
+    let claseBoton = 'btn btn-dark flex-grow-1';
+    if (agregando) claseBoton = 'btn btn-confirmado flex-grow-1';
+    else if (enCarrito) claseBoton = 'btn btn-outline-dark flex-grow-1';
+
+    function agregar() {
+        // En el máximo no se agrega nada, así que no hay qué confirmar: App solo avisa.
+        if (cantidad >= CANTIDAD_MAXIMA) {
+            onAgregar(producto.id);
+            return;
+        }
+        agregarConPausa(() => onAgregar(producto.id));
+    }
+
     function quitarUna() {
-        if (cantidad === 1) botonPrincipal.current.focus(); // El botón «−» está por desaparecer.
-        onQuitar(producto.id);
+        quitarConPausa(() => {
+            if (cantidad === 1) botonPrincipal.current.focus(); // El botón «−» está por desaparecer.
+            onQuitar(producto.id);
+        });
     }
 
     return (
@@ -93,17 +115,19 @@ function TarjetaProducto({ producto, vista, cantidad, onAgregar, onQuitar }) {
                     <div className="d-flex gap-2 acciones">
                         <button
                             ref={botonPrincipal}
-                            className={enCarrito ? 'btn btn-outline-dark flex-grow-1' : 'btn btn-dark flex-grow-1'}
+                            className={claseBoton}
                             type="button"
-                            onClick={() => onAgregar(producto.id)}
+                            aria-disabled={agregando}
+                            onClick={agregar}
                         >
-                            {textoBoton}
+                            {agregando ? '✓ Agregado' : textoBoton}
                         </button>
                         {enCarrito && (
                             <button
                                 className="btn btn-outline-dark"
                                 type="button"
                                 aria-label={'Quitar una unidad de ' + producto.nombre}
+                                aria-disabled={quitando}
                                 onClick={quitarUna}
                             >
                                 −

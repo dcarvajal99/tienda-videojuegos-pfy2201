@@ -96,8 +96,13 @@ de Bootstrap con el detalle de cada producto.
 | Estructura clara, comentarios y sin duplicación | Carpetas `hooks/`, `componentes/` y `utilidades/`; el carrito guarda solo `{ id, cantidad }` y toma el resto del catálogo |
 | gh-pages para React | `npm run deploy` publica `dist/` en la carpeta `react/` de la rama `gh-pages` |
 
-Además, el carrito se guarda en `localStorage` (un segundo `useEffect`) y se recupera al volver a
-abrir la página; los datos guardados que no tengan la forma esperada se descartan.
+También se incorporaron las observaciones de la revisión de la Semana 7:
+
+| Observación | Cómo se resolvió |
+|---|---|
+| Conservar el carrito entre sesiones | `useCarrito` lo guarda en `localStorage` y lo recupera al abrir la página |
+| Debounce en la búsqueda | `useDebounce` aplica el filtro 300 ms después de la última tecla, con aviso «Buscando…»; `useMemo` evita volver a filtrar cuando cambia el carrito o la vista |
+| Respuesta visible y sin clics repetidos | `useAccionBreve`: «✓ Agregado» con pausa de 600 ms en la tarjeta, pausa compartida de 400 ms en el carrito y confirmación antes de vaciarlo |
 
 Para trabajar en ella:
 
@@ -157,7 +162,7 @@ y abre `http://localhost:8000`.
 | 5 | Manipulando el DOM con JavaScript | Catálogo desde JSON con Fetch, filtros, validación del formulario y dólar |
 | 6 | Optimizando la lógica y rendimiento con JavaScript | Carrito, búsqueda, categorías en la barra, modal, estructura `assets/` y optimizaciones medidas |
 | 7 | Componentes funcionales en React | Catálogo y carrito rehechos con React 19 y Vite en `tienda-react/`, publicados en `/react/` |
-| 8 | Mejorando funcionalidades clave con React | Hooks propios, carrito guardado, botón «En el carrito», detalles por tarjeta, vista de lista y `npm run deploy` |
+| 8 | Mejorando funcionalidades clave con React | Hooks propios, carrito guardado, debounce, botón «En el carrito» con confirmación, detalles por tarjeta, vista de lista y `npm run deploy` |
 
 ```bash
 git log --oneline          # ver los ocho commits
