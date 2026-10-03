@@ -1,10 +1,12 @@
-// Panel del carrito: lista de líneas, contador de productos y total a pagar.
-// Cuando no hay nada, en lugar de la lista muestra un texto de carrito vacío.
+// Panel del carrito: líneas, contador de productos y total a pagar.
+// Muestra una de cuatro cosas: el aviso de carga, un aviso si el catálogo no cargó,
+// el carrito vacío o la lista.
 import FilaCarrito from './FilaCarrito.jsx';
+import Aviso from './Aviso.jsx';
 import { formatearPesos } from '../utilidades/formato.js';
 
-function Carrito({ items, unidades, total, mensaje, onQuitar, onEliminar, onVaciar }) {
-    const vacio = items.length === 0;
+function Carrito({ lineas, unidades, total, cargando, sinCatalogo, mensaje, onQuitar, onEliminar, onVaciar }) {
+    const vacio = lineas.length === 0;
 
     return (
         <aside className="card panel-carrito" aria-labelledby="tituloCarrito">
@@ -16,17 +18,28 @@ function Carrito({ items, unidades, total, mensaje, onQuitar, onEliminar, onVaci
                     </span>
                 </div>
 
-                {vacio ? (
+                {cargando && <Aviso tipo="carga" texto="Cargando el carrito…" />}
+
+                {/* Sin catálogo no hay nombres ni precios: el carrito guardado espera a que cargue. */}
+                {!cargando && sinCatalogo && (
                     <p className="text-secondary small mb-0">
-                        Todavía no agregas juegos. Usa el botón «Agregar al carrito» de cada tarjeta.
+                        Tu carrito se mostrará cuando el catálogo vuelva a cargar.
                     </p>
-                ) : (
+                )}
+
+                {!cargando && !sinCatalogo && vacio && (
+                    <p className="text-secondary small mb-0">
+                        Tu carrito está vacío. Usa el botón «Agregar al carrito» de cada juego.
+                    </p>
+                )}
+
+                {!cargando && !sinCatalogo && !vacio && (
                     <>
                         <ul className="list-unstyled mb-3">
-                            {items.map((item) => (
+                            {lineas.map((linea) => (
                                 <FilaCarrito
-                                    key={item.id}
-                                    item={item}
+                                    key={linea.id}
+                                    linea={linea}
                                     onQuitar={onQuitar}
                                     onEliminar={onEliminar}
                                 />
