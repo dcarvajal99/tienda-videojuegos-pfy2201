@@ -1,4 +1,4 @@
-# PixelPlay Store — Semana 7
+# PixelPlay Store — Semana 8
 
 > **Dos versiones de la misma tienda:**
 > el sitio en HTML, CSS y JavaScript está en la raíz (https://dcarvajal99.github.io/tienda-videojuegos-pfy2201/)
@@ -6,12 +6,14 @@
 > (https://dcarvajal99.github.io/tienda-videojuegos-pfy2201/react/).
 > Repositorio: https://github.com/dcarvajal99/tienda-videojuegos-pfy2201
 
-Actividad formativa «Construyendo componentes funcionales en React para un eCommerce interactivo» de
-la asignatura **Desarrollo Frontend I (PFY2201)**, Duoc UC. Exp 3 — Semana 7.
+Actividad sumativa «Mejorando funcionalidades clave en el eCommerce con React» de la asignatura
+**Desarrollo Frontend I (PFY2201)**, Duoc UC. Exp 3 — Semana 8.
 
-La Semana 7 agrega `tienda-react/`: el mismo catálogo rehecho con **React 19 y Vite**, con componentes
-funcionales, `useState`, `useEffect`, props y renderizado condicional. El sitio de las semanas
-anteriores queda intacto y sigue siendo el que se abre en la raíz.
+La Semana 7 agregó `tienda-react/`: el mismo catálogo rehecho con **React 19 y Vite**. La Semana 8 lo
+mejora: la lógica pasa a dos hooks propios (`useCatalogo` y `useCarrito`), el carrito se guarda en
+`localStorage`, el botón «Agregar al carrito» cambia a «En el carrito», cada tarjeta abre sus detalles
+y el catálogo se puede ver en cuadrícula o en lista. El sitio de las semanas anteriores queda intacto
+y sigue siendo el que se abre en la raíz.
 
 Tienda chilena de videojuegos para PlayStation 5 hecha con **Bootstrap 5.3.8** y **JavaScript**:
 la lista de productos se carga desde un JSON con la Fetch API, se puede buscar y filtrar por
@@ -37,11 +39,12 @@ tienda-videojuegos-pfy2201/
 │   ├── index.html                                        Página que monta React
 │   ├── public/productos.json                             Catálogo con precio normal y de oferta
 │   ├── public/img/                                       Portadas y logotipo
-│   ├── src/App.jsx                                       Componente raíz: estado y funciones
-│   ├── src/componentes/                                  7 componentes funcionales
-│   ├── src/utilidades/formato.js                         Funciones de formato y cálculo
+│   ├── src/App.jsx                                       Componente raíz: estado de la interfaz
+│   ├── src/hooks/                                        useCatalogo y useCarrito
+│   ├── src/componentes/                                  8 componentes funcionales
+│   ├── src/utilidades/                                   Formato, catálogo y carrito
 │   ├── src/estilos.css                                   Ajustes sobre Bootstrap
-│   └── capturas/                                         13 capturas de la Semana 7
+│   └── capturas/semana-7/, capturas/semana-8/            Evidencias de cada entrega
 └── README.md
 ```
 
@@ -66,7 +69,7 @@ También se conservan el carrusel de destacados (Semana 4), la referencia del d�
 mindicador.cl, el resaltado de tarjetas y el formulario de contacto validado (Semana 5), y un modal
 de Bootstrap con el detalle de cada producto.
 
-## La versión en React (Semana 7)
+## La versión en React (Semanas 7 y 8)
 
 | Pide la actividad | Cómo se resolvió |
 |---|---|
@@ -81,6 +84,26 @@ de Bootstrap con el detalle de cada producto.
 | Eventos | `onClick` en los botones; `onChange` en el buscador y en el selector de categorías |
 | Código modular y comentado | Componentes de una responsabilidad y funciones reutilizables en `src/utilidades/formato.js` |
 
+### Mejoras de la Semana 8
+
+| Pide la actividad | Cómo se resolvió |
+|---|---|
+| `useState` para el catálogo, el carrito y un elemento interactivo | El catálogo vive en `useCatalogo`, el carrito en `useCarrito` y cada tarjeta tiene su propio estado para «Ver detalles» / «Ocultar detalles» |
+| `useEffect` para cargar los productos y actualizar el estado | `useCatalogo` pide `productos.json`, guarda productos, carga y error, y vuelve a pedirlo con «Reintentar» |
+| Mensaje cuando el carrito está vacío | El panel muestra el aviso de carga, el carrito vacío o la lista, según el estado |
+| Cambiar «Agregar al carrito» por «En el carrito» | El botón pasa a «En el carrito (n) · Agregar otra», aparece «−» para quitar una unidad y en diez unidades dice «Máximo» |
+| Alternar vistas o estilos | Botones Cuadrícula / Lista con `aria-pressed` |
+| Estructura clara, comentarios y sin duplicación | Carpetas `hooks/`, `componentes/` y `utilidades/`; el carrito guarda solo `{ id, cantidad }` y toma el resto del catálogo |
+| gh-pages para React | `npm run deploy` publica `dist/` en la carpeta `react/` de la rama `gh-pages` |
+
+También se incorporaron las observaciones de la revisión de la Semana 7:
+
+| Observación | Cómo se resolvió |
+|---|---|
+| Conservar el carrito entre sesiones | `useCarrito` lo guarda en `localStorage` y lo recupera al abrir la página |
+| Debounce en la búsqueda | `useDebounce` aplica el filtro 300 ms después de la última tecla, con aviso «Buscando…»; `useMemo` evita volver a filtrar cuando cambia el carrito o la vista |
+| Respuesta visible y sin clics repetidos | `useAccionBreve`: «✓ Agregado» con pausa de 600 ms en la tarjeta, pausa compartida de 400 ms en el carrito y confirmación antes de vaciarlo |
+
 Para trabajar en ella:
 
 ```bash
@@ -88,6 +111,7 @@ cd tienda-react
 npm install
 npm run dev      # desarrollo
 npm run build    # deja la versión publicable en dist/
+npm run deploy   # publica en https://dcarvajal99.github.io/tienda-videojuegos-pfy2201/react/
 ```
 
 ## Optimizaciones medidas
@@ -138,9 +162,10 @@ y abre `http://localhost:8000`.
 | 5 | Manipulando el DOM con JavaScript | Catálogo desde JSON con Fetch, filtros, validación del formulario y dólar |
 | 6 | Optimizando la lógica y rendimiento con JavaScript | Carrito, búsqueda, categorías en la barra, modal, estructura `assets/` y optimizaciones medidas |
 | 7 | Componentes funcionales en React | Catálogo y carrito rehechos con React 19 y Vite en `tienda-react/`, publicados en `/react/` |
+| 8 | Mejorando funcionalidades clave con React | Hooks propios, carrito guardado, debounce, botón «En el carrito» con confirmación, detalles por tarjeta, vista de lista y `npm run deploy` |
 
 ```bash
-git log --oneline          # ver los siete commits
+git log --oneline          # ver los ocho commits
 git checkout <hash>        # situarse en la entrega de esa semana
 git checkout main          # volver al estado actual
 ```

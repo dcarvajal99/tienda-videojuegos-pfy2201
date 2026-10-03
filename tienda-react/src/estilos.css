@@ -1,4 +1,4 @@
-/* PixelPlay Store en React · Diego Carvajal · PFY2201 Semana 7
+/* PixelPlay Store en React · Diego Carvajal · PFY2201 Semana 8
    Hoja de estilos propia: solo ajusta lo que Bootstrap no cubre y mantiene la
    misma paleta sobria del sitio de las semanas anteriores. */
 
@@ -43,8 +43,10 @@ footer {
     width: auto;
 }
 
+/* Las portadas son cuadradas (800 × 800); height: auto deja que mande aspect-ratio. */
 .portada {
-    aspect-ratio: 16 / 9;
+    height: auto;
+    aspect-ratio: 1 / 1;
     object-fit: cover;
 }
 
@@ -57,6 +59,40 @@ footer {
     object-fit: cover;
 }
 
+/* Detalles que se abren con «Ver detalles» */
+.detalles {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: .25rem .75rem;
+}
+
+.detalles dt {
+    font-weight: 500;
+    color: var(--pp-gris);
+}
+
+.detalles dd {
+    margin: 0;
+}
+
+/* Vista de lista: desde 576 px la portada pasa a la izquierda de la tarjeta */
+@media (min-width: 576px) {
+    .tarjeta-lista {
+        flex-direction: row;
+    }
+
+    .tarjeta-lista .portada {
+        width: 12rem;
+        flex-shrink: 0;
+        border-top-right-radius: 0;
+        border-bottom-left-radius: var(--bs-card-inner-border-radius);
+    }
+
+    .tarjeta-lista .acciones {
+        max-width: 22rem;
+    }
+}
+
 /* 4. Carrito: se queda a la vista en pantallas grandes */
 @media (min-width: 992px) {
     .panel-carrito {
@@ -67,8 +103,9 @@ footer {
 
 /* 5. Foco visible con contraste suficiente en todos los controles */
 .btn-dark,
+.btn-outline-dark,
 .btn-outline-secondary,
-.btn-light {
+.btn-link {
     --bs-btn-focus-shadow-rgb: var(--pp-acento-rgb);
 }
 
@@ -80,6 +117,67 @@ footer {
 
 a:focus-visible,
 button:focus-visible {
+    outline: 2px solid var(--pp-acento);
+    outline-offset: 2px;
+}
+
+/* 6. Respuesta visible a las acciones */
+
+/* Línea bajo el buscador: siempre reserva su alto para que nada salte */
+.linea-estado {
+    min-height: 1.5rem;
+}
+
+/* Resultados anteriores mientras corre la espera del debounce */
+.resultados-pendientes {
+    opacity: .55;
+}
+
+/* Los botones cambian de estado al instante: la confirmación dura 600 ms y un
+   fundido de Bootstrap se comería parte de ella */
+.btn {
+    transition: none;
+}
+
+/* Botones en pausa después de una acción: se ven desactivados */
+.btn[aria-disabled="true"] {
+    opacity: .65;
+    cursor: not-allowed;
+}
+
+/* Confirmación «✓ Agregado»: el acento de la marca, sin atenuar */
+.btn-confirmado {
+    --bs-btn-color: #fff;
+    --bs-btn-bg: var(--pp-acento);
+    --bs-btn-border-color: var(--pp-acento);
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: var(--pp-acento);
+    --bs-btn-hover-border-color: var(--pp-acento);
+    --bs-btn-active-color: #fff;
+    --bs-btn-active-bg: var(--pp-acento);
+    --bs-btn-active-border-color: var(--pp-acento);
+    --bs-btn-focus-shadow-rgb: var(--pp-acento-rgb);
+}
+
+.btn-confirmado[aria-disabled="true"] {
+    opacity: 1;
+    cursor: default;
+}
+
+/* Pregunta antes de vaciar el carrito */
+.confirmacion {
+    padding: .75rem;
+    border: 1px solid var(--pp-borde);
+    border-radius: .375rem;
+    background-color: var(--pp-gris-claro);
+}
+
+/* El título del carrito recibe el foco por código; con el mouse no se marca */
+#tituloCarrito:focus:not(:focus-visible) {
+    outline: none;
+}
+
+#tituloCarrito:focus-visible {
     outline: 2px solid var(--pp-acento);
     outline-offset: 2px;
 }
