@@ -3,7 +3,7 @@
 import TarjetaProducto from './TarjetaProducto.jsx';
 import Aviso from './Aviso.jsx';
 
-function ListaProductos({ productos, total, vista, cantidadEnCarrito, onAgregar, onQuitar }) {
+function ListaProductos({ productos, total, vista, pendiente, cantidadEnCarrito, onAgregar, onQuitar }) {
     if (productos.length === 0) {
         return <Aviso tipo="vacio" texto="Ningún juego coincide con la búsqueda. Prueba con otra palabra." />;
     }
@@ -17,7 +17,9 @@ function ListaProductos({ productos, total, vista, cantidadEnCarrito, onAgregar,
                 Mostrando {productos.length} de {total} juegos.
             </p>
 
-            <div className={'row g-3 g-lg-4 ' + columnas}>
+            {/* Mientras la búsqueda está pendiente, los resultados anteriores se atenúan. */}
+            <div className={'row g-3 g-lg-4 ' + columnas + (pendiente ? ' resultados-pendientes' : '')}
+                aria-busy={pendiente}>
                 {productos.map((producto) => (
                     // key: identificador único que React necesita para reutilizar cada tarjeta.
                     <TarjetaProducto

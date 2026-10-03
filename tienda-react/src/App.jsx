@@ -1,6 +1,6 @@
 // Componente raíz: une los dos hooks propios (catálogo y carrito), guarda el estado
 // de la interfaz y reparte datos y funciones a los componentes hijos mediante props.
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import BarraTienda from './componentes/BarraTienda.jsx';
 import Filtros from './componentes/Filtros.jsx';
 import SelectorVista from './componentes/SelectorVista.jsx';
@@ -9,8 +9,11 @@ import Carrito from './componentes/Carrito.jsx';
 import Aviso from './componentes/Aviso.jsx';
 import { useCatalogo } from './hooks/useCatalogo.js';
 import { useCarrito, CANTIDAD_MAXIMA } from './hooks/useCarrito.js';
+import { useDebounce } from './hooks/useDebounce.js';
 import { listarCategorias, filtrarProductos } from './utilidades/catalogo.js';
 import { armarLineas, contarUnidades, calcularTotal } from './utilidades/carrito.js';
+
+const ESPERA_BUSQUEDA = 300; // Milisegundos sin escribir antes de filtrar.
 
 function App() {
     const catalogo = useCatalogo();
@@ -22,10 +25,20 @@ function App() {
     const [vista, setVista] = useState('cuadricula'); // 'cuadricula' o 'lista'
     const [mensaje, setMensaje] = useState('');
 
-    // Datos derivados: se recalculan en cada render, no necesitan estado propio.
-    const categorias = listarCategorias(catalogo.productos);
-    const visibles = filtrarProductos(catalogo.productos, busqueda, categoria);
-    const lineas = armarLineas(carrito.items, catalogo.productos);
+    // Debounce: la búsqueda se aplica 300 ms después de la última tecla. Si el campo
+    // queda vacío, el catálogo completo vuelve de inmediato, sin esperar.
+    const busquedaDiferida = useDebounce(busqueda, ESPERA_BUSQUEDA);
+    const busquedaAplicada = busqueda.trim() === '' ? '' : busquedaDiferida;
+    const buscando = busqueda.trim() !== busquedaAplicada.trim();
+
+    // Datos derivados. useMemo evita repetir un cálculo cuando no cambió lo que usa:
+    // agregar al carrito o cambiar la vista ya no vuelve a filtrar el catálogo.
+    const categorias = useMemo(() => listarCategorias(catalogo.productos), [catalogo.productos]);
+    const visibles = useMemo(
+        () => filtrarProductos(catalogo.productos, busquedaAplicada, categoria),
+        [catalogo.productos, busquedaAplicada, categoria],
+    );
+    const lineas = useMemo(() => armarLineas(carrito.items, catalogo.productos), [carrito.items, catalogo.productos]);
     const unidades = contarUnidades(lineas);
     const total = calcularTotal(lineas);
 
@@ -83,6 +96,7 @@ function App() {
                             busqueda={busqueda}
                             categoria={categoria}
                             categorias={categorias}
+                            buscando={buscando}
                             onBuscar={setBusqueda}
                             onCategoria={setCategoria}
                         />
@@ -99,6 +113,7 @@ function App() {
                                     productos={visibles}
                                     total={catalogo.productos.length}
                                     vista={vista}
+                                    pendiente={buscando}
                                     cantidadEnCarrito={carrito.cantidadDe}
                                     onAgregar={agregar}
                                     onQuitar={quitarUnidad}
