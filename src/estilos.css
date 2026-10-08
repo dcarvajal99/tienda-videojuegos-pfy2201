@@ -37,7 +37,51 @@ footer {
     background-color: var(--pp-blanco);
 }
 
-/* 3. Marca y catálogo */
+/* 3. Barra de navegación, secciones y portada */
+.navbar {
+    --bs-navbar-color: var(--pp-gris);
+    --bs-navbar-hover-color: var(--pp-tinta);
+    --bs-navbar-active-color: var(--pp-acento);
+}
+
+.navbar .nav-link.active {
+    font-weight: 600;
+}
+
+/* Al saltar a una sección, el título no queda tapado por la barra fija */
+section[id],
+#carrito {
+    scroll-margin-top: 5.5rem;
+}
+
+/* Cifras de la portada: CSS Grid de tres columnas */
+.cifras {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: .75rem;
+}
+
+.cifras > div {
+    padding: 1rem;
+    border: 1px solid var(--pp-borde);
+    border-radius: .5rem;
+    background-color: var(--pp-gris-claro);
+}
+
+.cifras dt {
+    font-size: .875rem;
+    font-weight: 500;
+    color: var(--pp-gris);
+}
+
+.cifras dd {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+/* 3.1 Catálogo */
 .logo {
     height: 2.25rem;
     width: auto;
@@ -97,7 +141,7 @@ footer {
 @media (min-width: 992px) {
     .panel-carrito {
         position: sticky;
-        top: 1.5rem;
+        top: 6rem; /* Bajo la barra de navegación fija */
     }
 }
 

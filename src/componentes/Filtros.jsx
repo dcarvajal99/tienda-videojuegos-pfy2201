@@ -3,7 +3,7 @@
 // Mientras corre la espera del debounce, bajo el buscador aparece «Buscando…».
 function Filtros({ busqueda, categoria, categorias, buscando, onBuscar, onCategoria }) {
     return (
-        <div className="row g-3 mb-4" id="catalogo">
+        <div className="row g-3 mb-4">
             <div className="col-12 col-sm-7">
                 <label className="form-label" htmlFor="campoBusqueda">Buscar juego</label>
                 <input

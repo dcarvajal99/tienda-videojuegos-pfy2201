@@ -1,7 +1,8 @@
 // Componente raíz: une los dos hooks propios (catálogo y carrito), guarda el estado
 // de la interfaz y reparte datos y funciones a los componentes hijos mediante props.
 import { useState, useEffect, useMemo } from 'react';
-import BarraTienda from './componentes/BarraTienda.jsx';
+import BarraNavegacion from './componentes/BarraNavegacion.jsx';
+import Portada from './componentes/Portada.jsx';
 import Filtros from './componentes/Filtros.jsx';
 import SelectorVista from './componentes/SelectorVista.jsx';
 import ListaProductos from './componentes/ListaProductos.jsx';
@@ -10,10 +11,17 @@ import Aviso from './componentes/Aviso.jsx';
 import { useCatalogo } from './hooks/useCatalogo.js';
 import { useCarrito, CANTIDAD_MAXIMA } from './hooks/useCarrito.js';
 import { useDebounce } from './hooks/useDebounce.js';
+import { useSeccionVisible } from './hooks/useSeccionVisible.js';
 import { listarCategorias, filtrarProductos } from './utilidades/catalogo.js';
 import { armarLineas, contarUnidades, calcularTotal } from './utilidades/carrito.js';
 
 const ESPERA_BUSQUEDA = 300; // Milisegundos sin escribir antes de filtrar.
+
+// Secciones de la página: la barra de navegación arma sus enlaces con esta lista.
+const SECCIONES = [
+    { id: 'inicio', texto: 'Inicio' },
+    { id: 'catalogo', texto: 'Catálogo' },
+];
 
 function App() {
     const catalogo = useCatalogo();
@@ -41,6 +49,8 @@ function App() {
     const lineas = useMemo(() => armarLineas(carrito.items, catalogo.productos), [carrito.items, catalogo.productos]);
     const unidades = contarUnidades(lineas);
     const total = calcularTotal(lineas);
+    const ofertas = catalogo.productos.filter((producto) => producto.precioOferta).length;
+    const seccionActiva = useSeccionVisible(SECCIONES.map((seccion) => seccion.id));
 
     // Efecto: la cantidad de productos del carrito se refleja en el título de la pestaña.
     useEffect(() => {
@@ -82,66 +92,70 @@ function App() {
 
     return (
         <>
-            <BarraTienda unidades={unidades} />
+            <BarraNavegacion secciones={SECCIONES} seccionActiva={seccionActiva} unidades={unidades} />
 
-            <main className="container py-4 py-lg-5">
-                <h1 className="h3 mb-2">Catálogo de videojuegos PS5</h1>
-                <p className="text-secondary mb-4">
-                    Versión de PixelPlay Store construida con componentes funcionales de React.
-                </p>
+            <main>
+                <Portada juegos={catalogo.productos.length} categorias={categorias.length - 1} ofertas={ofertas} />
 
-                <div className="row g-4 g-lg-5">
-                    <div className="col-12 col-lg-8">
-                        <Filtros
-                            busqueda={busqueda}
-                            categoria={categoria}
-                            categorias={categorias}
-                            buscando={buscando}
-                            onBuscar={setBusqueda}
-                            onCategoria={setCategoria}
-                        />
+                <section id="catalogo" className="container py-5" aria-labelledby="tituloCatalogo">
+                    <h2 className="h3 mb-2" id="tituloCatalogo">Catálogo</h2>
+                    <p className="text-secondary mb-4">
+                        Busca por nombre o filtra por categoría, y agrega los juegos que quieras al carrito.
+                    </p>
 
-                        {/* Renderizado condicional: carga, error o catálogo */}
-                        {catalogo.cargando && <Aviso tipo="carga" texto="Cargando el catálogo…" />}
-                        {!catalogo.cargando && catalogo.error && (
-                            <Aviso tipo="error" texto={catalogo.error} onReintentar={catalogo.reintentar} />
-                        )}
-                        {!catalogo.cargando && !catalogo.error && (
-                            <>
-                                <SelectorVista vista={vista} onCambiar={setVista} />
-                                <ListaProductos
-                                    productos={visibles}
-                                    total={catalogo.productos.length}
-                                    vista={vista}
-                                    pendiente={buscando}
-                                    cantidadEnCarrito={carrito.cantidadDe}
-                                    onAgregar={agregar}
-                                    onQuitar={quitarUnidad}
-                                />
-                            </>
-                        )}
+                    <div className="row g-4 g-lg-5">
+                        <div className="col-12 col-lg-8">
+                            <Filtros
+                                busqueda={busqueda}
+                                categoria={categoria}
+                                categorias={categorias}
+                                buscando={buscando}
+                                onBuscar={setBusqueda}
+                                onCategoria={setCategoria}
+                            />
+
+                            {/* Renderizado condicional: carga, error o catálogo */}
+                            {catalogo.cargando && <Aviso tipo="carga" texto="Cargando el catálogo…" />}
+                            {!catalogo.cargando && catalogo.error && (
+                                <Aviso tipo="error" texto={catalogo.error} onReintentar={catalogo.reintentar} />
+                            )}
+                            {!catalogo.cargando && !catalogo.error && (
+                                <>
+                                    <SelectorVista vista={vista} onCambiar={setVista} />
+                                    <ListaProductos
+                                        productos={visibles}
+                                        total={catalogo.productos.length}
+                                        vista={vista}
+                                        pendiente={buscando}
+                                        cantidadEnCarrito={carrito.cantidadDe}
+                                        onAgregar={agregar}
+                                        onQuitar={quitarUnidad}
+                                    />
+                                </>
+                            )}
+                        </div>
+
+                        <div className="col-12 col-lg-4">
+                            <Carrito
+                                lineas={lineas}
+                                unidades={unidades}
+                                total={total}
+                                cargando={catalogo.cargando}
+                                sinCatalogo={Boolean(catalogo.error)}
+                                mensaje={mensaje}
+                                onQuitar={quitarUnidad}
+                                onEliminar={eliminar}
+                                onVaciar={vaciar}
+                            />
+                        </div>
                     </div>
-
-                    <div className="col-12 col-lg-4">
-                        <Carrito
-                            lineas={lineas}
-                            unidades={unidades}
-                            total={total}
-                            cargando={catalogo.cargando}
-                            sinCatalogo={Boolean(catalogo.error)}
-                            mensaje={mensaje}
-                            onQuitar={quitarUnidad}
-                            onEliminar={eliminar}
-                            onVaciar={vaciar}
-                        />
-                    </div>
-                </div>
+                </section>
             </main>
 
-            <footer className="border-top py-4 mt-4">
+            <footer className="border-top py-4">
                 <div className="container">
                     <p className="mb-0 small text-secondary">
-                        PixelPlay Store · Diego Carvajal · Desarrollo Frontend I (PFY2201) · Semana 8
+                        PixelPlay Store · Diego Carvajal · Desarrollo Frontend I (PFY2201)
                     </p>
                 </div>
             </footer>

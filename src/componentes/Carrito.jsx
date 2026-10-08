@@ -64,7 +64,7 @@ function Carrito({ lineas, unidades, total, cargando, sinCatalogo, mensaje, onQu
     }
 
     return (
-        <aside className="card panel-carrito" aria-labelledby="tituloCarrito">
+        <aside className="card panel-carrito" id="carrito" aria-labelledby="tituloCarrito">
             <div className="card-body">
                 <div className="d-flex align-items-center justify-content-between mb-3">
                     <h2 className="h6 mb-0" id="tituloCarrito" ref={titulo} tabIndex={-1}>Tu carrito</h2>
