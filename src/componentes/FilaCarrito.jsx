@@ -2,13 +2,14 @@
 // otro elimina el producto completo. Durante la pausa que sigue a cada acción,
 // los botones se ven desactivados y no responden.
 import { formatearPesos } from '../utilidades/formato.js';
+import ImagenJuego from './ImagenJuego.jsx';
 
 function FilaCarrito({ linea, bloqueado, onQuitar, onEliminar }) {
     return (
         <li className="d-flex gap-3 py-2 border-bottom">
-            <img
+            <ImagenJuego
                 className="miniatura"
-                src={import.meta.env.BASE_URL + linea.imagen}
+                imagen={linea.imagen}
                 width="48"
                 height="48"
                 alt=""

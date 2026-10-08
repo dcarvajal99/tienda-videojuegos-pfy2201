@@ -21,6 +21,9 @@
     --bs-link-hover-color: var(--pp-acento);
     --bs-dark: var(--pp-tinta);
     --bs-dark-rgb: 24, 24, 27;
+    /* Errores de formulario: un rojo más oscuro que el de Bootstrap, con mejor contraste */
+    --bs-form-invalid-color: #b02a37;
+    --bs-form-invalid-border-color: #b02a37;
 }
 
 /* 2. Estructura */
@@ -216,12 +219,12 @@ button:focus-visible {
     background-color: var(--pp-gris-claro);
 }
 
-/* El título del carrito recibe el foco por código; con el mouse no se marca */
-#tituloCarrito:focus:not(:focus-visible) {
+/* Los títulos que reciben el foco por código (tabindex="-1"): con el mouse no se marcan */
+[tabindex="-1"]:focus:not(:focus-visible) {
     outline: none;
 }
 
-#tituloCarrito:focus-visible {
+h2[tabindex="-1"]:focus-visible {
     outline: 2px solid var(--pp-acento);
     outline-offset: 2px;
 }

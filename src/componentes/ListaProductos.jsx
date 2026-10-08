@@ -3,7 +3,7 @@
 import TarjetaProducto from './TarjetaProducto.jsx';
 import Aviso from './Aviso.jsx';
 
-function ListaProductos({ productos, total, vista, pendiente, cantidadEnCarrito, onAgregar, onQuitar }) {
+function ListaProductos({ productos, total, vista, pendiente, cantidadEnCarrito, onAgregar, onQuitar, onEliminar }) {
     if (productos.length === 0) {
         return <Aviso tipo="vacio" texto="Ningún juego coincide con la búsqueda. Prueba con otra palabra." />;
     }
@@ -29,6 +29,7 @@ function ListaProductos({ productos, total, vista, pendiente, cantidadEnCarrito,
                         cantidad={cantidadEnCarrito(producto.id)}
                         onAgregar={onAgregar}
                         onQuitar={onQuitar}
+                        onEliminar={onEliminar}
                     />
                 ))}
             </div>

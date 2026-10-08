@@ -1,8 +1,11 @@
 // Componente raíz: une los dos hooks propios (catálogo y carrito), guarda el estado
 // de la interfaz y reparte datos y funciones a los componentes hijos mediante props.
-import { useState, useEffect, useMemo } from 'react';
+// Así un cambio en una sección se refleja en las demás: agregar un juego actualiza la
+// lista, el filtro, las cifras de la portada y el estado de la administración.
+import { useState, useEffect, useMemo, useRef } from 'react';
 import BarraNavegacion from './componentes/BarraNavegacion.jsx';
 import Portada from './componentes/Portada.jsx';
+import SeccionAdministrar from './componentes/SeccionAdministrar.jsx';
 import SeccionContacto from './componentes/SeccionContacto.jsx';
 import Filtros from './componentes/Filtros.jsx';
 import SelectorVista from './componentes/SelectorVista.jsx';
@@ -15,6 +18,7 @@ import { useDebounce } from './hooks/useDebounce.js';
 import { useSeccionVisible } from './hooks/useSeccionVisible.js';
 import { listarCategorias, filtrarProductos } from './utilidades/catalogo.js';
 import { armarLineas, contarUnidades, calcularTotal } from './utilidades/carrito.js';
+import { comparable } from './utilidades/validaciones.js';
 
 const ESPERA_BUSQUEDA = 300; // Milisegundos sin escribir antes de filtrar.
 
@@ -22,6 +26,7 @@ const ESPERA_BUSQUEDA = 300; // Milisegundos sin escribir antes de filtrar.
 const SECCIONES = [
     { id: 'inicio', texto: 'Inicio' },
     { id: 'catalogo', texto: 'Catálogo' },
+    { id: 'administrar', texto: 'Administrar' },
     { id: 'contacto', texto: 'Contacto' },
 ];
 
@@ -33,7 +38,18 @@ function App() {
     const [busqueda, setBusqueda] = useState('');
     const [categoria, setCategoria] = useState('todas');
     const [vista, setVista] = useState('cuadricula'); // 'cuadricula' o 'lista'
-    const [mensaje, setMensaje] = useState('');
+    const [mensaje, setMensaje] = useState('');        // Último cambio del carrito
+    const [avisoCatalogo, setAvisoCatalogo] = useState(''); // Último cambio del catálogo
+
+    // Si una tarjeta desaparece con el foco dentro, el foco pasa al título del catálogo.
+    // La acción lo anota y el efecto lo aplica después del render, cuando la tarjeta ya no está.
+    const tituloCatalogo = useRef(null);
+    const enfocarCatalogo = useRef(false);
+    useEffect(() => {
+        if (!enfocarCatalogo.current) return;
+        enfocarCatalogo.current = false;
+        tituloCatalogo.current?.focus();
+    });
 
     // Debounce: la búsqueda se aplica 300 ms después de la última tecla. Si el campo
     // queda vacío, el catálogo completo vuelve de inmediato, sin esperar.
@@ -52,6 +68,10 @@ function App() {
     const unidades = contarUnidades(lineas);
     const total = calcularTotal(lineas);
     const ofertas = catalogo.productos.filter((producto) => producto.precioOferta).length;
+    const nombresExistentes = useMemo(
+        () => catalogo.productos.map((producto) => comparable(producto.nombre)),
+        [catalogo.productos],
+    );
     const seccionActiva = useSeccionVisible(SECCIONES.map((seccion) => seccion.id));
 
     // Efecto: la cantidad de productos del carrito se refleja en el título de la pestaña.
@@ -87,6 +107,32 @@ function App() {
         setMensaje('El carrito quedó vacío.');
     }
 
+    // --- Acciones del catálogo: agregar, quitar y restablecer ---
+
+    function agregarVideojuego(videojuego) {
+        catalogo.agregarVideojuego(videojuego);
+        // Se limpian los filtros para que el juego nuevo quede a la vista en el catálogo.
+        setBusqueda('');
+        setCategoria('todas');
+        setAvisoCatalogo('Agregaste ' + videojuego.nombre + ' al catálogo.');
+    }
+
+    function quitarDelCatalogo(id) {
+        const nombre = nombreDe(id);
+        catalogo.eliminarVideojuego(id);
+        carrito.eliminar(id); // Un juego que ya no se vende tampoco queda en el carrito.
+        setAvisoCatalogo('Quitaste ' + nombre + ' del catálogo.');
+        enfocarCatalogo.current = true;
+    }
+
+    function restablecerCatalogo() {
+        // Los juegos agregados desaparecen: también salen del carrito.
+        catalogo.productos.filter((producto) => producto.id.startsWith('propio-'))
+            .forEach((producto) => carrito.eliminar(producto.id));
+        catalogo.restablecer();
+        setAvisoCatalogo('El catálogo volvió a su versión original.');
+    }
+
     function nombreDe(id) {
         const producto = catalogo.productos.find((actual) => actual.id === id);
         return producto ? producto.nombre : 'el producto';
@@ -100,7 +146,7 @@ function App() {
                 <Portada juegos={catalogo.productos.length} categorias={categorias.length - 1} ofertas={ofertas} />
 
                 <section id="catalogo" className="container py-5" aria-labelledby="tituloCatalogo">
-                    <h2 className="h3 mb-2" id="tituloCatalogo">Catálogo</h2>
+                    <h2 className="h3 mb-2" id="tituloCatalogo" ref={tituloCatalogo} tabIndex={-1}>Catálogo</h2>
                     <p className="text-secondary mb-4">
                         Busca por nombre o filtra por categoría, y agrega los juegos que quieras al carrito.
                     </p>
@@ -123,6 +169,8 @@ function App() {
                             )}
                             {!catalogo.cargando && !catalogo.error && (
                                 <>
+                                    {/* Región que anuncia los cambios del catálogo; sin texto no ocupa espacio */}
+                                    <p className={avisoCatalogo ? 'small mb-3' : 'visually-hidden'} role="status">{avisoCatalogo}</p>
                                     <SelectorVista vista={vista} onCambiar={setVista} />
                                     <ListaProductos
                                         productos={visibles}
@@ -132,6 +180,7 @@ function App() {
                                         cantidadEnCarrito={carrito.cantidadDe}
                                         onAgregar={agregar}
                                         onQuitar={quitarUnidad}
+                                        onEliminar={quitarDelCatalogo}
                                     />
                                 </>
                             )}
@@ -152,6 +201,13 @@ function App() {
                         </div>
                     </div>
                 </section>
+
+                <SeccionAdministrar
+                    catalogo={catalogo}
+                    nombresExistentes={nombresExistentes}
+                    onAgregar={agregarVideojuego}
+                    onRestablecer={restablecerCatalogo}
+                />
 
                 <SeccionContacto />
             </main>

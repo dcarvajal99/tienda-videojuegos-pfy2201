@@ -9,8 +9,10 @@ import { useState, useRef } from 'react';
 import { formatearPesos, calcularDescuento, resumir } from '../utilidades/formato.js';
 import { CANTIDAD_MAXIMA } from '../hooks/useCarrito.js';
 import { useAccionBreve } from '../hooks/useAccionBreve.js';
+import ImagenJuego from './ImagenJuego.jsx';
+import BotonConConfirmacion from './BotonConConfirmacion.jsx';
 
-function TarjetaProducto({ producto, vista, cantidad, onAgregar, onQuitar }) {
+function TarjetaProducto({ producto, vista, cantidad, onAgregar, onQuitar, onEliminar }) {
     // Estado local: solo esta tarjeta necesita saber si sus detalles están abiertos.
     const [detallesAbiertos, setDetallesAbiertos] = useState(false);
     // Referencia al botón principal, para devolverle el foco si desaparece el botón «−».
@@ -50,9 +52,9 @@ function TarjetaProducto({ producto, vista, cantidad, onAgregar, onQuitar }) {
     return (
         <div className="col">
             <article className={vista === 'lista' ? 'card h-100 tarjeta-lista' : 'card h-100'}>
-                <img
+                <ImagenJuego
                     className="card-img-top portada"
-                    src={import.meta.env.BASE_URL + producto.imagen}
+                    imagen={producto.imagen}
                     width="800"
                     height="800"
                     loading="lazy"
@@ -133,6 +135,17 @@ function TarjetaProducto({ producto, vista, cantidad, onAgregar, onQuitar }) {
                                 −
                             </button>
                         )}
+                    </div>
+
+                    {/* Quitar el juego del catálogo pide confirmación antes de borrarlo */}
+                    <div className="mt-2">
+                        <BotonConConfirmacion
+                            texto="Quitar del catálogo"
+                            pregunta={'¿Quitar ' + producto.nombre + ' del catálogo?'}
+                            textoConfirmar="Sí, quitar"
+                            claseBoton="btn btn-link btn-sm p-0 text-secondary"
+                            onConfirmar={() => onEliminar(producto.id)}
+                        />
                     </div>
                 </div>
             </article>

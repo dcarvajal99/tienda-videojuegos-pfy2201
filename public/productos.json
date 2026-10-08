@@ -1,4 +1,11 @@
 {
+  "categorias": [
+    "Acción y aventura",
+    "Carreras y simulación",
+    "Deportes",
+    "Plataformas",
+    "Rol (RPG)"
+  ],
   "productos": [
     {
       "id": "spider-man-2",
