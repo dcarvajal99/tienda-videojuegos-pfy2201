@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Salida de las pruebas en navegadores
+pruebas/salida

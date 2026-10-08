@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8"><title>Prueba a 390 px</title></head>
+<body style="margin:0">
+<!-- Los navegadores headless no bajan de 500 px de ventana: la tienda corre en un iframe de 390 px -->
+<iframe id="marco" title="Tienda a 390 px" style="border:0;width:390px;height:844px"></iframe>
+<script>
+document.getElementById('marco').src = 'tienda-videojuegos-pfy2201/?nav=' + new URLSearchParams(location.search).get('nav');
+</script>
+</body></html>
