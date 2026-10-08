@@ -7,6 +7,7 @@ import BarraNavegacion from './componentes/BarraNavegacion.jsx';
 import Portada from './componentes/Portada.jsx';
 import SeccionAdministrar from './componentes/SeccionAdministrar.jsx';
 import SeccionContacto from './componentes/SeccionContacto.jsx';
+import PiePagina from './componentes/PiePagina.jsx';
 import Filtros from './componentes/Filtros.jsx';
 import SelectorVista from './componentes/SelectorVista.jsx';
 import ListaProductos from './componentes/ListaProductos.jsx';
@@ -212,13 +213,7 @@ function App() {
                 <SeccionContacto />
             </main>
 
-            <footer className="border-top py-4">
-                <div className="container">
-                    <p className="mb-0 small text-secondary">
-                        PixelPlay Store · Diego Carvajal · Desarrollo Frontend I (PFY2201)
-                    </p>
-                </div>
-            </footer>
+            <PiePagina secciones={SECCIONES} />
         </>
     );
 }

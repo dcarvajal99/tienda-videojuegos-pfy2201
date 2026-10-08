@@ -17,8 +17,11 @@
     --bs-body-bg: var(--pp-gris-claro);
     --bs-border-color: var(--pp-borde);
     --bs-secondary-color: var(--pp-gris);
+    /* Bootstrap 5.3 pinta los enlaces con las variables -rgb */
     --bs-link-color: var(--pp-acento);
-    --bs-link-hover-color: var(--pp-acento);
+    --bs-link-color-rgb: var(--pp-acento-rgb);
+    --bs-link-hover-color: var(--pp-tinta);
+    --bs-link-hover-color-rgb: 24, 24, 27;
     --bs-dark: var(--pp-tinta);
     --bs-dark-rgb: 24, 24, 27;
     /* Errores de formulario: un rojo más oscuro que el de Bootstrap, con mejor contraste */
@@ -82,6 +85,25 @@ section[id],
     font-size: 2rem;
     font-weight: 600;
     line-height: 1.2;
+}
+
+/* Pie de página: CSS Grid que reparte las columnas según el ancho disponible */
+.pie-grilla {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+    gap: 2rem;
+}
+
+.pie-titulo {
+    margin-bottom: .75rem;
+    font-size: .875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--pp-tinta);
+}
+
+.pie li + li {
+    margin-top: .375rem;
 }
 
 /* 3.1 Catálogo */
