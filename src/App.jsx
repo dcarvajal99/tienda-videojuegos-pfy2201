@@ -3,6 +3,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import BarraNavegacion from './componentes/BarraNavegacion.jsx';
 import Portada from './componentes/Portada.jsx';
+import SeccionContacto from './componentes/SeccionContacto.jsx';
 import Filtros from './componentes/Filtros.jsx';
 import SelectorVista from './componentes/SelectorVista.jsx';
 import ListaProductos from './componentes/ListaProductos.jsx';
@@ -21,6 +22,7 @@ const ESPERA_BUSQUEDA = 300; // Milisegundos sin escribir antes de filtrar.
 const SECCIONES = [
     { id: 'inicio', texto: 'Inicio' },
     { id: 'catalogo', texto: 'Catálogo' },
+    { id: 'contacto', texto: 'Contacto' },
 ];
 
 function App() {
@@ -150,6 +152,8 @@ function App() {
                         </div>
                     </div>
                 </section>
+
+                <SeccionContacto />
             </main>
 
             <footer className="border-top py-4">
